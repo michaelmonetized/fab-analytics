@@ -1,14 +1,23 @@
 <?php
 
 if (isset($data)) {
-  $message = "";
+  $mail = [
+    'to' => 'sales@hustlelaunch.com',
+    'subject' => 'New Lead',
+    'body' => "",
+    'headers' => [
+      'From: success@hustlelaunch.com',
+      'Content-Type: text/html; charset=UTF-8',
+      "Reply-To: " . $data->data->email || "success@hustlelaunch.com",
+    ],
+  ];
 
   foreach ($data->data as $key => $value) {
-    $message .= $key . ": " . $value . "\n";
+    $mail['body'] .= $key . ": " . $value . "\n";
   }
 
-  $message .= "\n\n" . $data->ip;
-  $message .= "\n\n" . $data->pathname;
+  $mail['body'] .= "\n\n" . $data->ip;
+  $mail['body'] .= "\n\n" . $data->pathname;
 
-  mail('success@hustlelaunch.com', 'New Lead', $data);
+  mail($mail['to'], $mail['subject'], $mail['body'], $mail['headers']);
 }

@@ -26,7 +26,7 @@ $domain = $data->domain;
 $identifier = base64_encode($data->session_token . '-' . microtime());
 
 // get json file
-$path = $_SERVER['DOCUMENT_ROOT'] . '/logs/' . $domain;
+$path = str_replace('/api/post/visit/', '', __DIR__) . '/logs/' . $domain;
 $json_file = "{$path}/{$identifier}.json";
 
 if (!file_exists($path)) {

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" class="p-0 m-0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>fab-analytics.js</title>
+    <script src="fab-analytics.js"></script>
+    <!-- use tailwindcss for styling -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+      integrity="sha512-wnea99uKIC3TJF7v4eKk4Y+lMz2Mklv18+r4na2Gn1abDRPPOeef95xTzdwGD9e6zXJBteMIhZ1+68QC5byJZw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer" />
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"
+      integrity="sha512-iFG+x1vUw5VYbXPn+yQ8fY+fGt/a6/wazWMSN1w+M8k4/4Hbr6+Mbz+v9EtiP/j/0fI0/5A/D5p5G1p/e/v/y/w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"></script>
+  </head>
+  <body class="bg-gray-100 text-gray-900 font-sans">
+    <div class="flex flex-col items-stretch justify-start h-dvh gap-md p-0 m-0">
+      <h1>fab-analytics.js</h1>
+
+      <a href="tel:+18283317985">Call 828-331-7985</a>
+      <a href="mailto:success@hustlelaunch.com">Email Hustle Launch</a>
+
+      <form action="/test.html" method="post">
+        <label for="name">Name</label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          required
+          class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          placeholder="(required) Your Actual Real Name" />
+
+        <label for="phone">Phone</label>
+        <input
+          type="tel"
+          name="phone"
+          id="phone"
+          required
+          class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          placeholder="(required) Your Real Phone Number we'll check it!" />
+
+        <label for="email">Email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          required
+          class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          placeholder="(required) Your Actual Real Email seriously we're validating here!" />
+
+        <label for="message">Message</label>
+        <textarea
+          name="message"
+          id="message"
+          rows="2"
+          class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+          placeholder="A real thoughtful message *if you want (not required)*"></textarea>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </body>
+</html>
