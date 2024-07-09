@@ -6,98 +6,147 @@
  * @license GPL
  *
  * @todo
- * - [ ] track form submit, mailto: and tel: clicks as conversions
- * - [ ] send form data to endpoint and save to localStorage as JSON on field onchange events
- * - [ ] load field values from localStorage when a user returns if form was not submit
- * - [ ] send form data to an endpoint when form submits and clear localStorage
- * - [ ] send visit obeject to endpoint when page when script runs.
+- [x] track form submit, mailto: and tel: clicks as conversions
+- [x] send form data to endpoint and save to localStorage as JSON on field onchange events
+- [x] load field values from localStorage when a user returns if form was not submit
+- [x] send form data to an endpoint when form submits and clear localStorage
+- [x] send visit obeject to endpoint when page when script runs.
+- [x] set cookie on first visit
  */
 
 const fab__endpoint = "https://www.hustlelaunch.com/api/post/visits/";
 
+/**
+ * Generates a random session token
+ * @returns {string}
+ */
 function fab__randomSessionToken() {
-  if (window.localStorage.getItem("fab_session_token")) {
-    return window.localStorage.getItem("fab_session_token");
-  }
+  const existingToken = window.localStorage.getItem("fab_session_token");
+
+  if (existingToken) return existingToken;
 
   const chars =
     "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890";
 
-  let output = "";
-
-  for (let i = 0; i < 16; i++) {
-    output += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-
-  return output;
+  return Array.from({ length: 16 }, () =>
+    chars.charAt(Math.floor(Math.random() * chars.length))
+  ).join("");
 }
 
+/**
+ * Gets the visitor's IP address
+ * @returns {Promise<string>}
+ * @throws {Error}
+ * @todo
+ */
 async function fab__getVisitorIpAddress() {
-  const ip = await fetch("https://api.ipify.org?format=json");
+  try {
+    const response = await fetch("https://api.ipify.org?format=json");
 
-  ip.then((response) => {
-    return response.json();
-  }).catch((error) => {
+    const data = await response.json();
+
+    return data.ip;
+  } catch (error) {
     console.error("Error:", error);
-  });
 
-  return ip;
+    return null;
+  }
 }
 
+/**
+ * Visit object
+ * @type {Object}
+ * @property {string} domain
+ * @property {string} session_token
+ * @property {number} session_start
+ * @property {number} session_end
+ * @property {string} pathname
+ * @property {string} ip
+ * @property {Array} dimensions
+ * @todo
+- [x] Add user agent
+- [x] Add referrer
+- [x] Add browser language
+- [x] Add browser timezone
+ */
 const fab__visit = {
   domain: window.location.hostname,
   session_token: fab__randomSessionToken(),
-  session_start: new Date.now(),
-  session_end: new Date.now() + 20 * 60 * 60, // +20 mins
+  session_start: Date.now(),
+  session_end: Date.now() + 20 * 60 * 1000, // +20 mins in milliseconds
   pathname: window.location.pathname,
-  ip: fab__getVisitorIpAddress(),
-  dimensions: [window.innerWidth, window.innerHeight],
+  ip: null,
+  viewport: [window.innerWidth, window.innerHeight],
+  user_agent: navigator.userAgent,
+  referrer: document.referrer,
+  browser_language: navigator.language,
+  browser_timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  device: navigator.userAgentData?.platform || navigator.platform,
+  screen: {
+    width: window.screen.width,
+    height: window.screen.height,
+    orientation: window.screen.orientation,
+    dpi: window.screen.pixelDepth,
+  },
+  title: document.title,
 };
 
+/**
+ * Stores an event in the endpoint
+ * @param {Object} data
+ * @returns {Promise<Object>}
+ */
 async function fab_storeEvent(data) {
-  const res = await fetch(fab__endpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
+  try {
+    const response = await fetch(fab__endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
 
-  res.then((response) => response.json());
+    const result = await response.json();
 
-  res.catch((error) => {
+    console.log("Success:", result);
+
+    return result;
+  } catch (error) {
     console.error("Error:", error);
-  });
-
-  res.then((data) => {
-    console.log("Success:", data);
-  });
-
-  return res;
+    throw error;
+  }
 }
 
+/**
+ * Tracks a pageview
+ * @returns {Promise<void>}
+ */
 async function fab__pageview() {
-  const res = await fab_storeEvent(fab__visit);
+  if (!fab__visit.ip) {
+    fab__visit.ip = await fab__getVisitorIpAddress();
+  }
+
+  return fab_storeEvent({
+    ...fab__visit,
+    event: "pageview",
+    category: "session",
+    action: "start",
+  });
 }
 
+/**
+ * Starts a new user session if the current session has expired
+ */
 function fab__startUserSession() {
-  if (
-    !(
-      window.localStorage.getItem(fab_session_expire).getTime() >
-      new Date.getTime()
-    )
-  ) {
+  const sessionExpires = window.localStorage.getItem("fab_session_expires");
+
+  if (!sessionExpires || Number(sessionExpires) < Date.now()) {
     window.localStorage.setItem("fab_session_token", fab__visit.session_token);
+    window.localStorage.setItem("fab_session_start", fab__visit.session_start);
+    window.localStorage.setItem("fab_session_expires", fab__visit.session_end);
 
-    window.localStorage.setItem(
-      "fab_session_started",
-      fab__visit.session_start
-    );
-
-    window.localStorage.setItem(
-      "fab_session_expires",
-      fab__visit.session_end.getTime()
-    );
+    // Set cookie on first visit
+    document.cookie = `fab_session_token=${fab__visit.session_token}; expires=${fab__visit.session_end}; path=/`;
   }
 
   fab__pageview();
@@ -105,52 +154,35 @@ function fab__startUserSession() {
 
 fab__startUserSession();
 
-window.addEventListener("beforeunload", function () {
-  let event = fab__visit;
+/**
+ * Tracks page exits
+ */
+window.addEventListener("beforeunload", async () => {
+  fab__visit.session_end = Date.now();
 
-  event.session_end = new Date.now();
+  window.localStorage.setItem("fab_session_expires", fab__visit.session_end);
 
-  this.window.localStorage.setItem(
-    "fab_session_expires",
-    event.session_end.getTime()
-  );
-
-  event = {
-    ...event,
+  const event = {
+    ...fab__visit,
     event: "pageview",
     category: "page",
     action: "exit",
   };
 
-  const save = async () => {
-    const res = await fab_storeEvent(event);
-
-    res.then((data) => {
-      console.log("Success:", data);
-    });
-
-    res.catch((error) => {
-      console.error("Error:", error);
-    });
-
-    return res;
-  };
-
-  return save();
+  await fab_storeEvent(event);
 });
 
-window.addEventListener("unload", function () {
-  fab__pageview();
-});
+window.addEventListener("unload", fab__pageview);
 
+/**
+ * Tracks click conversions
+ */
 document
   .querySelectorAll('a[href*="mailto:"], a[href*="tel:"]')
-  .forEach(function (element) {
-    let event = fab__visit;
-
-    element.addEventListener("click", function (e) {
-      event = {
-        ...event,
+  .forEach((element) => {
+    element.addEventListener("click", async (e) => {
+      const event = {
+        ...fab__visit,
         href: element.href,
         event: "conversion",
         category: element.href.includes("mailto:") ? "Email" : "Call",
@@ -158,138 +190,80 @@ document
         data: element,
       };
 
-      const save = async () => {
-        const res = await fab_storeEvent(event);
-
-        res.then((data) => {
-          console.log("Success:", data);
-        });
-
-        res.catch((error) => {
-          console.error("Error:", error);
-        });
-
-        return res;
-      };
-
-      return save();
+      await fab_storeEvent(event);
     });
   });
 
-document.querySelectorAll("form").forEach(function (element) {
-  let event = fab__visit;
+/**
+ * Tracks form conversions and abandonments
+ */
+document.querySelectorAll("form").forEach((form) => {
+  const submitHandler = async (event, action) => {
+    const formData = new FormData(event.target);
 
-  const action = async (e) => {
-    event = {
-      ...event,
-      href: element.action,
+    const data = Object.fromEntries(formData.entries());
+
+    const formEvent = {
+      ...fab__visit,
+      href: form.action,
       event: "conversion",
       category: "form",
-      action: "submit",
-      data: e.formData,
+      action,
+      data,
     };
 
-    const save = async () => {
-      const res = await fab_storeEvent(event);
+    await fab_storeEvent(formEvent);
 
-      res.then((data) => {
-        console.log("Success:", data);
-      });
-
-      res.catch((error) => {
-        console.error("Error:", error);
-      });
-
-      return res;
-    };
-
-    // remove from localStorage by form action as key
-    window.localStorage.removeItem(element.action);
-
-    return save();
+    if (action === "submit") {
+      window.localStorage.removeItem(form.action);
+    }
   };
 
-  element.addEventListener("formdata", function (e) {
-    return action(e);
+  form.addEventListener("submit", (e) => submitHandler(e, "submit"));
+
+  // Handle form abandonment
+  const handleFormAbandonment = async (form, action) => {
+    const formData = new FormData(form);
+
+    const data = Object.fromEntries(formData.entries());
+
+    const event = {
+      ...fab__visit,
+      href: form.action,
+      event: "abandonment",
+      category: "form",
+      action,
+      data,
+    };
+
+    await fab_storeEvent(event);
+  };
+
+  const abandonmentEvents = [
+    "change",
+    "blur",
+    "focus",
+    "beforeunload",
+    "unload",
+    "mouseleave",
+    "visibilitychange",
+    "touchmove",
+  ];
+
+  abandonmentEvents.forEach((eventType) => {
+    form.addEventListener(eventType, (e) =>
+      handleFormAbandonment(form, "presave")
+    );
   });
 
-  element.addEventListener("submit", function (e) {
-    return action(e);
-  });
+  form.querySelectorAll("input, select, textarea, output").forEach((field) => {
+    field.addEventListener("change", (e) => {
+      window.localStorage.setItem(
+        form.action,
+        JSON.stringify(new FormData(form))
+      );
 
-  element.addEventListener("change", function (e) {
-    return action(e);
-  });
-
-  element
-    .querySelectorAll("input, select, textarea, output")
-    .forEach(function (field) {
-      const presave_action = async (e) => {
-        event = {
-          ...event,
-          href: element.action,
-          event: "abandonment",
-          category: "form",
-          action: "presave",
-          data: e.formData,
-        };
-
-        const presave = async () => {
-          const res = await fab_storeEvent(event);
-
-          res.then((data) => {
-            console.log("Success:", data);
-          });
-
-          res.catch((error) => {
-            console.error("Error:", error);
-          });
-
-          return res;
-        };
-
-        window.localStorage.setItem(element.action, JSON.stringify(event.data));
-
-        return presave();
-      };
-
-      field.addEventListener("change", function (e) {
-        return presave_action(e);
-      });
-
-      field.addEventListener("blur", function (e) {
-        return presave_action(e);
-      });
-
-      field.addEventListener("focus", function (e) {
-        return presave_action(e);
-      });
-
-      window.addEventListener("blur", function (e) {
-        return presave_action(e);
-      });
-
-      window.addEventListener("beforeunload", function (e) {
-        return presave_action(e);
-      });
-
-      document.addEventListener("unload", function (e) {
-        console.log("unload");
-        return presave_action(e);
-      });
-
-      window.addEventListener("mouseleave", function (e) {
-        if (e.relatedTarget) {
-          return presave_action(e);
-        }
-      });
-
-      document.addEventListener("visibilitychange", function (e) {
-        return presave_action(e);
-      });
-
-      window.addEventListener("touchmove", function (e) {
-        return presave_action(e);
-      });
+      handleFormAbandonment(form, "presave");
     });
+  });
 });
