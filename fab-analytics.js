@@ -108,11 +108,17 @@ async function fab_storeEvent(data) {
       body: JSON.stringify(data),
     });
 
-    const result = await response.json();
+    const resultText = await response.text();
 
-    console.log("Success:", result);
-
-    return result;
+    // Attempt to parse the response as JSON
+    try {
+      const result = JSON.parse(resultText);
+      console.log("Success:", result);
+      return result;
+    } catch (jsonError) {
+      console.error("Response is not valid JSON:", resultText);
+      throw new Error("Response is not valid JSON");
+    }
   } catch (error) {
     console.error("Error:", error);
     throw error;
