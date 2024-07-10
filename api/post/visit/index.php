@@ -12,6 +12,7 @@
  * @url https://www.hustlelaunch.com
  * @maintainer @michaelmonetized
  */
+$now = microtime();
 
 // get json from phpinput
 $json = file_get_contents('php://input');
@@ -19,26 +20,52 @@ $json = file_get_contents('php://input');
 // decode json
 $data = json_decode($json);
 
+if (json_last_error() !== JSON_ERROR_NONE) {
+  header('Content-Type: application/json');
+  header('Access-Control-Allow-Origin: *');
+
+  echo json_encode(['error' => 'Invalid JSON']);
+  die();
+}
+
+if (!isValidData($data)) {
+  header('Content-Type: application/json');
+  header('Access-Control-Allow-Origin: *');
+
+  echo json_encode(['error' => 'Invalid data']);
+  die();
+}
+
 // get domain
 $domain = $data->domain;
 
+// get token
+$token = $data->session_token;
+
 // get identifier
-$identifier = base64_encode($data->session_token . '-' . microtime());
+$identifier = "{$domain}-{$token}-{$now}";
 
 // get json file
-$path = str_replace('/api/post/visit/', '', __DIR__) . '/logs/' . $domain;
-$json_file = "{$path}/{$identifier}.json";
-
-if (!file_exists($path)) {
-  mkdir($path, 0777, true);
-}
+$path = str_replace('/api/post/visit/', '', __DIR__) . '/logs';
+$file = "{$path}/{$identifier}.json";
 
 // write json to file
-file_put_contents($json_file, $json);
+if (!(file_put_contents($file, $json))) {
+  header('Content-Type: application/json');
+  header('Access-Control-Allow-Origin: *');
+
+  echo json_encode(['error' => 'Unable to write to file']);
+  die();
+}
 
 // if the domain contains oxstu as a substring then include ../send/index.php
 if (strpos($domain, 'oxstu') !== false && $data->category === 'form') {
   include '../send/index.php';
+}
+
+function isValidData($data)
+{
+  return isset($data->domain) && isset($data->session_token);
 }
 
 // return json
