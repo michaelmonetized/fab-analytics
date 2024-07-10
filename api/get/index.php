@@ -39,20 +39,25 @@ function list_all_clients()
     $domains[$domain] = [];
 
     foreach (glob("{$plugin_path}/logs/{$domain}/*.json") as $file) {
-      $filename = basename($file);
+      $filename = basename($file); // eg: 4nued5vSLHLcc3Wx-0.61882100 1720604394.json
 
       $parts = explode("-", $filename);
 
       $token = $parts[0];
-      $microtime = $parts[1];
+      $microtime = $parts[1]; // need to convert to int timestamp example input: 0.61882100 1720604394 expected output: 1720604394
+
+      $microtimeParts = explode(" ", $microtime);
+
+      $milliseconds = floor(intval($microtimeParts[1] . str_replace("0.", ".", $microtimeParts[0])) * 1000);
+      $seconds = intval($microtimeParts[1]);
 
       $contents = file_get_contents($file);
 
       $data = json_decode($contents);
 
-      $year = intval(date("Y", $microtime));
-      $month = intval(date("m", $microtime));
-      $day = intval(date("d", $microtime));
+      $year = intval(date("Y", $seconds)); // fatal error expects int string given
+      $month = intval(date("m", $seconds)); // fatal error expects int string given
+      $day = intval(date("d", $seconds)); // fatal error expects int string given
 
       $event = $data->event;
 
@@ -80,15 +85,20 @@ function data_for_client($domain)
     $parts = explode("-", $filename);
 
     $token = $parts[0];
-    $microtime = $parts[1];
+    $microtime = $parts[1]; // need to convert to int timestamp example input: 0.61882100 1720604394 expected output: 1720604394
+
+    $microtimeParts = explode(" ", $microtime);
+
+    $milliseconds = floor(intval($microtimeParts[1] . str_replace("0.", ".", $microtimeParts[0])) * 1000);
+    $seconds = intval($microtimeParts[1]);
 
     $contents = file_get_contents($file);
 
     $data = json_decode($contents);
 
-    $year = intval(date("Y", $microtime));
-    $month = intval(date("m", $microtime));
-    $day = intval(date("d", $microtime));
+    $year = intval(date("Y", $seconds));
+    $month = intval(date("m", $seconds));
+    $day = intval(date("d", $seconds));
 
     $event = $data->event;
 

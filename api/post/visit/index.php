@@ -13,6 +13,9 @@
  * @maintainer @michaelmonetized
  */
 $now = trim(microtime());
+$time = time();
+$timestamp = date("U");
+
 $plugin_path = str_replace("/api/post/visit", '', __DIR__);
 
 // get json from phpinput
