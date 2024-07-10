@@ -6,8 +6,7 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover, user-scalable=no, minimal-ui, maximum-scale=1.0, minimum-scale=1.0" />
-    <title>fab-analytics.js</title>
-    <script src="/fab.js?v=0.1.3-b-36"></script>
+    <title>Get test</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
@@ -106,38 +105,44 @@
 
             results.innerHTML = "";
 
-            Object.keys(data).forEach((year) => {
-              const yearElement = document.createElement("h3");
-              yearElement.innerHTML = year;
+            Object.keys(data).forEach((domain) => {
+              const domainElement = document.createElement("h3");
+              domainElement.innerHTML = domain;
 
               results.appendChild(yearElement);
+              Object.keys(data).forEach((year) => {
+                const yearElement = document.createElement("h4");
+                yearElement.innerHTML = year;
 
-              Object.keys(data[year]).forEach((month) => {
-                const monthElement = document.createElement("h4");
-                monthElement.innerHTML = month;
+                results.appendChild(yearElement);
 
-                results.appendChild(monthElement);
+                Object.keys(data[year]).forEach((month) => {
+                  const monthElement = document.createElement("h5");
+                  monthElement.innerHTML = month;
 
-                Object.keys(data[year][month]).forEach((day) => {
-                  const dayElement = document.createElement("h5");
-                  dayElement.innerHTML = day;
+                  results.appendChild(monthElement);
 
-                  results.appendChild(dayElement);
+                  Object.keys(data[year][month]).forEach((day) => {
+                    const dayElement = document.createElement("h6");
+                    dayElement.innerHTML = day;
 
-                  Object.keys(data[year][month][day]).forEach((event) => {
-                    const eventElement = document.createElement("h6");
-                    eventElement.innerHTML = event;
+                    results.appendChild(dayElement);
 
-                    results.appendChild(eventElement);
+                    Object.keys(data[year][month][day]).forEach((event) => {
+                      const eventElement = document.createElement("strong");
+                      eventElement.innerHTML = event;
 
-                    Object.keys(data[year][month][day][event]).forEach(
-                      (token) => {
-                        const tokenElement = document.createElement("h6");
-                        tokenElement.innerHTML = token;
+                      results.appendChild(eventElement);
 
-                        results.appendChild(tokenElement);
-                      }
-                    );
+                      Object.keys(data[year][month][day][event]).forEach(
+                        (token) => {
+                          const tokenElement = document.createElement("p");
+                          tokenElement.innerHTML = token;
+
+                          results.appendChild(tokenElement);
+                        }
+                      );
+                    });
                   });
                 });
               });
