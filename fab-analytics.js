@@ -14,6 +14,8 @@
 - [x] set cookie on first visit
  */
 
+console.log("elementor-activity-started", "okay");
+
 const fab__endpoint =
   "https://www.hustlelaunch.com/fab-analytics/api/post/visit/";
 
@@ -48,8 +50,6 @@ async function fab__getVisitorIpAddress() {
 
     return data.ip;
   } catch (error) {
-    console.error("Error:", error);
-
     return null;
   }
 }
@@ -98,7 +98,6 @@ const fab__visit = {
  * @returns {Promise<Object>}
  */
 async function fab_storeEvent(data) {
-  console.log("fab_storeEvent", data);
   try {
     const response = await fetch(fab__endpoint, {
       method: "POST",
@@ -113,14 +112,11 @@ async function fab_storeEvent(data) {
     // Attempt to parse the response as JSON
     try {
       const result = JSON.parse(resultText);
-      console.log("Success:", result);
       return result;
     } catch (jsonError) {
-      console.error("Response is not valid JSON:", resultText);
       throw new Error("Response is not valid JSON");
     }
   } catch (error) {
-    console.error("Error:", error);
     throw error;
   }
 }
