@@ -114,23 +114,27 @@
 
             Object.keys(data).forEach((domain) => {
               const domainElement = document.createElement("h3");
+              domainElement.classList.add("text-3xl");
               domainElement.innerHTML = domain;
 
               results.appendChild(domainElement);
               Object.keys(data).forEach((year) => {
                 const yearElement = document.createElement("h4");
+                yearElement.classList.add("text-2xl");
                 yearElement.innerHTML = year;
 
                 results.appendChild(yearElement);
 
                 Object.keys(data[year]).forEach((month) => {
                   const monthElement = document.createElement("h5");
+                  monthElement.classList.add("text-xl");
                   monthElement.innerHTML = month;
 
                   results.appendChild(monthElement);
 
                   Object.keys(data[year][month]).forEach((day) => {
                     const dayElement = document.createElement("h6");
+                    dayElement.classList.add("text-lg");
                     dayElement.innerHTML = day;
 
                     results.appendChild(dayElement);
@@ -147,6 +151,15 @@
                           tokenElement.innerHTML = token;
 
                           results.appendChild(tokenElement);
+
+                          Object.keys(
+                            data[year][month][day][event][token]
+                          ).forEach((visitor) => {
+                            const visitorElement = document.createElement("p");
+                            visitorElement.innerHTML = visitor;
+
+                            results.appendChild(visitorElement);
+                          });
                         }
                       );
                     });
