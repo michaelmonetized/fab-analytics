@@ -36,7 +36,7 @@
 
       <div id="results-wrapper">
         <h2>Results</h2>
-        <div id="results"></div>
+        <div id="results" class="divide-y-1 divide-gray-300"></div>
       </div>
     </div>
 
@@ -112,68 +112,66 @@
 
             results.innerHTML = "";
 
-            Object.keys(data).forEach((domain) => {
-              const domainElement = document.createElement("h3");
-              domainElement.classList.add("text-3xl");
-              domainElement.innerHTML = domain;
+            const domainElement = document.createElement("div");
+            domainElement.classList.add("p-[21px]");
+            domainElement.innerHTML = domain;
 
-              results.appendChild(domainElement);
-              Object.keys(data).forEach((year) => {
-                const yearElement = document.createElement("h4");
-                yearElement.classList.add("text-2xl");
-                yearElement.innerHTML = year;
+            results.appendChild(domainElement);
+            Object.keys(data).forEach((year) => {
+              const yearElement = document.createElement("h4");
+              yearElement.classList.add("text-2xl");
+              yearElement.innerHTML = year;
 
-                results.appendChild(yearElement);
+              domainElement.appendChild(yearElement);
 
-                Object.keys(data[year]).forEach((month) => {
-                  const monthElement = document.createElement("h5");
-                  monthElement.classList.add("text-xl");
-                  monthElement.innerHTML = month;
+              Object.keys(data[year]).forEach((month) => {
+                const monthElement = document.createElement("h5");
+                monthElement.classList.add("text-xl");
+                monthElement.innerHTML = month;
 
-                  results.appendChild(monthElement);
+                domainElement.appendChild(monthElement);
 
-                  Object.keys(data[year][month]).forEach((day) => {
-                    const dayElement = document.createElement("h6");
-                    dayElement.classList.add("text-lg");
-                    dayElement.innerHTML = day;
+                Object.keys(data[year][month]).forEach((day) => {
+                  const dayElement = document.createElement("h6");
+                  dayElement.classList.add("text-lg");
+                  dayElement.innerHTML = day;
 
-                    results.appendChild(dayElement);
+                  domainElement.appendChild(dayElement);
 
-                    Object.keys(data[year][month][day]).forEach((event) => {
-                      const eventElement = document.createElement("strong");
-                      eventElement.classList.add("font-bold");
-                      eventElement.innerHTML = event;
+                  Object.keys(data[year][month][day]).forEach((event) => {
+                    const eventElement = document.createElement("strong");
+                    eventElement.classList.add("font-bold");
+                    eventElement.innerHTML = event;
 
-                      results.appendChild(eventElement);
+                    domainElement.appendChild(eventElement);
 
-                      Object.keys(data[year][month][day][event]).forEach(
-                        (token) => {
-                          const tokenElement = document.createElement("p");
-                          tokenElement.innerHTML = token;
+                    Object.keys(data[year][month][day][event]).forEach(
+                      (token) => {
+                        const tokenElement = document.createElement("p");
+                        tokenElement.innerHTML = token;
 
-                          results.appendChild(tokenElement);
+                        domainElement.appendChild(tokenElement);
+
+                        Object.keys(
+                          data[year][month][day][event][token]
+                        ).forEach((visitor) => {
+                          const visitorElement = document.createElement("p");
+                          visitorElement.innerHTML = visitor;
+
+                          domainElement.appendChild(visitorElement);
 
                           Object.keys(
-                            data[year][month][day][event][token]
-                          ).forEach((visitor) => {
-                            const visitorElement = document.createElement("p");
-                            visitorElement.innerHTML = visitor;
+                            data[year][month][day][event][token][visitor]
+                          ).forEach((dimension) => {
+                            const dimensionElement =
+                              document.createElement("p");
+                            dimensionElement.innerHTML = `${dimension}: ${data[year][month][day][event][token][visitor][dimension]}`;
 
-                            results.appendChild(visitorElement);
-
-                            Object.keys(
-                              data[year][month][day][event][token][visitor]
-                            ).forEach((dimension) => {
-                              const dimensionElement =
-                                document.createElement("p");
-                              dimensionElement.innerHTML = dimension;
-
-                              results.appendChild(dimensionElement);
-                            });
+                            domainElement.appendChild(dimensionElement);
                           });
-                        }
-                      );
-                    });
+                        });
+                      }
+                    );
                   });
                 });
               });
