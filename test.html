@@ -22,9 +22,10 @@
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
   </head>
-  <body class="bg-gray-100 text-gray-900 font-sans text-[21px]">
+  <body
+    class="bg-gray-100 text-gray-900 font-sans text-[21px] flex flex-col items-stretch justify-center h-dvh overflow-x-clip overflow-y-auto">
     <div
-      class="flex flex-col items-stretch justify-start h-dvh gap-md p-[21px] mx-auto md:w-[768px] bg-white rounded-md shadow-xl border-gray-300">
+      class="flex flex-col items-stretch justify-start gap-md p-[21px] mx-auto md:w-[768px] bg-white rounded-md shadow-xl border-gray-300">
       <h1 class="text-lg">Test fab-analytics.js</h1>
 
       <a href="tel:+18283317985">Call 828-331-7985</a>
@@ -66,7 +67,11 @@
           class="w-full rounded-md border-gray-300 p-md text-lg border-1"
           placeholder="A real thoughtful message *if you want (not required)*"></textarea>
 
-        <button type="submit">Submit</button>
+        <button
+          type="submit"
+          class="rounded-md bg-blue-500 px-md py-2 text-white">
+          Submit
+        </button>
       </form>
     </div>
   </body>
