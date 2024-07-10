@@ -68,8 +68,25 @@ function isValidData($data)
   return isset($data->domain) && isset($data->session_token);
 }
 
+$contents = file_get_contents($file);
+
+if ($contents === false) {
+  header('Content-Type: application/json');
+  header('Access-Control-Allow-Origin: *');
+
+  echo json_encode([
+    "error" => "Unable to read file $file"
+  ]);
+
+  die();
+}
+
 // return json
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-echo json_encode($data);
+echo json_encode([
+  "file" => $file,
+  "contents" => file_get_contents($file),
+  "data" => $data
+]);
