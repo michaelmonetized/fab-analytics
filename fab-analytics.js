@@ -15,7 +15,7 @@
  */
 
 const fab__endpoint =
-  "https://www.hustlelaunch.com/fab-analytics/api/post/visits/";
+  "https://www.hustlelaunch.com/fab-analytics/api/post/visit/";
 
 /**
  * Generates a random session token
