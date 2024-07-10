@@ -40,6 +40,24 @@
       </div>
     </div>
 
+    <template id="result-item-template">
+      <div class="result-item p-[21px]" data-domain="" data-year="" data-month="" data-day="" data-event="">
+        <h2 class="domain text-4xl"></h2>
+        <h3 class="year text-3xl"></h3>
+        <h4 class="month text-2xl"></h4>
+        <h5 class="day text-xl"></h5>
+        <h6 class="event text-lg"></h6>
+        <p>
+          <strong class="visitor"></strong>
+
+          <dl class="dimensions">
+            <dt class="dimension-name"></dt>
+            <dd class="dimension-value"></dd>
+          </dl>
+        </p>
+      </div>
+    </template>
+
     <script>
       const form = document.getElementById("domain");
 
@@ -101,83 +119,29 @@
 
       document.addEventListener("DOMContentLoaded", () => {
         fetch(`/fab-analytics/api/get/`)
-          .then((response) => {
-            //console.log(response);
-            //console.log(response.json());
-            //console.log(response.text());
-            return response.json();
-          })
-          .then((data) => {
-            const results = document.getElementById("results");
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          const results = document.getElementById("results");
 
-            results.innerHTML = "";
+          results.innerHTML = "";
 
-            const domainElement = document.createElement("div");
-            domainElement.classList.add("p-[21px]");
+          const resultItemTemplate = document.getElementById("result-item-template");
 
-            results.appendChild(domainElement);
-            Object.keys(data).forEach((year) => {
-              const yearElement = document.createElement("h2");
-              yearElement.classList.add("text-4xl");
-              yearElement.innerHTML = year;
+          Object.keys(data).forEach((domain) => {
+            const domainElement = resultItemTemplate.content.cloneNode(true);
+            domainElement.querySelector(".domain").innerHTML = domain;
 
-              domainElement.appendChild(yearElement);
-
-              Object.keys(data[year]).forEach((month) => {
-                const monthElement = document.createElement("h3");
-                monthElement.classList.add("text-3xl");
-                monthElement.innerHTML = month;
-
-                domainElement.appendChild(monthElement);
-
-                Object.keys(data[year][month]).forEach((day) => {
-                  const dayElement = document.createElement("h4");
-                  dayElement.classList.add("text-2xl");
-                  dayElement.innerHTML = day;
-
-                  domainElement.appendChild(dayElement);
-
-                  Object.keys(data[year][month][day]).forEach((event) => {
-                    const eventElement = document.createElement("h5");
-                    eventElement.classList.add("text-cl");
-                    eventElement.innerHTML = event;
-
-                    domainElement.appendChild(eventElement);
-
-                    Object.keys(data[year][month][day][event]).forEach(
-                      (token) => {
-                        const tokenElement = document.createElement("h6");
-                        eventElement.classList.add("text-lg");
-                        tokenElement.innerHTML = token;
-
-                        domainElement.appendChild(tokenElement);
-
-                        Object.keys(
-                          data[year][month][day][event][token]
-                        ).forEach((visitor) => {
-                          const visitorElement = document.createElement("p");
-                          eventElement.classList.add("font-bold");
-                          visitorElement.innerHTML = visitor;
-
-                          domainElement.appendChild(visitorElement);
-
-                          Object.keys(
-                            data[year][month][day][event][token][visitor]
-                          ).forEach((dimension) => {
-                            const dimensionElement =
-                              document.createElement("p");
-                            dimensionElement.innerHTML = `${dimension}: ${data[year][month][day][event][token][visitor][dimension]}`;
-
-                            domainElement.appendChild(dimensionElement);
-                          });
-                        });
-                      }
-                    );
-                  });
-                });
-              });
+            Object.keys(data.domain.year.month.day.event.token).forEach((visitor) => {
+              domainElement.querySelector(".year").innerHTML = data.domain.year;
+              domainElement.querySelector(".month").innerHTML = data.domain.month;
+              domainElement.querySelector(".day").innerHTML = data.domain.day;
+              domainElement.querySelector(".event").innerHTML = data.domain.event;
+              domainElement.querySelector(".visitor").innerHTML = visitor;
             });
-          });
+        });
+      });
       });
     </script>
   </body>

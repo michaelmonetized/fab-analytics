@@ -25,7 +25,7 @@ if (isset($_GET)) {
 
 /**
  * List all domains in the logs directory
- * @returns {array} of domains with children files grouped by nested [Year][Month][Day][event][token] keys
+ * @returns {array} of domain objectss with children file contents as data event counts in respective keys
  */
 function list_all_clients()
 {
@@ -36,33 +36,71 @@ function list_all_clients()
   foreach (glob("{$plugin_path}/logs/*") as $domain) {
     $domain = basename($domain);
 
-    $domains[$domain] = [];
+    $stats = [
+      'pageviews' => 0,
+      'unique_sessions' => 0,
+      'unique_visitors' => 0,
+      'conversions' => 0,
+      'calls' => 0,
+      'emails' => 0,
+      'submissions' => 0,
+      'form_abandonments' => 0,
+      'data' => [],
+    ];
+
+    $pageviews = [];
+    $visitors = [];
 
     foreach (glob("{$plugin_path}/logs/{$domain}/*.json") as $file) {
-      $filename = basename($file); // eg: 4nued5vSLHLcc3Wx-0.61882100 1720604394.json
-
-      $parts = explode("-", $filename);
-
-      $token = $parts[0];
-      $microtime = $parts[1]; // need to convert to int timestamp example input: 0.61882100 1720604394 expected output: 1720604394
-
-      $microtimeParts = explode(" ", $microtime);
-
-      $milliseconds = floor(intval($microtimeParts[1] . str_replace("0.", ".", $microtimeParts[0])) * 1000);
-      $seconds = intval($microtimeParts[1]);
-
       $contents = file_get_contents($file);
 
       $data = json_decode($contents);
 
-      $year = intval(date("Y", $seconds)); // fatal error expects int string given
-      $month = intval(date("m", $seconds)); // fatal error expects int string given
-      $day = intval(date("d", $seconds)); // fatal error expects int string given
-
       $event = $data->event;
 
-      $domains[$domain][$year][$month][$day][$event][$token] = $data;
+      // fill counts
+      switch ($event) {
+        case 'pageview':
+          $stats['pageviews']++;
+
+          $pageviews[] = $data->session_token;
+
+          $visitors[] = $data->ip;
+
+          break;
+        case 'conversion':
+          $stats['conversions']++;
+
+          switch ($data->category) {
+            case 'Email':
+              $stats['emails']++;
+
+              break;
+            case 'Call':
+              $stats['calls']++;
+
+              break;
+            case 'form':
+              $stats['submissions']++;
+
+              break;
+          }
+
+          break;
+        case 'abandonment':
+          $stats['form_abandonments']++;
+
+          break;
+      }
+
+      $stats['data'] = $data;
     }
+
+    $stats['unique_sessions'] = count(array_unique($pageviews));
+    $stats['unique_visitors'] = count(array_unique($visitors));
+
+    // convert stats to object
+    $domains[$domain] = (object) $stats;
   }
 
   output_client_data($domains);
