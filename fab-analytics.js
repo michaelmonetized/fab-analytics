@@ -98,6 +98,7 @@ const fab__visit = {
  * @returns {Promise<Object>}
  */
 async function fab_storeEvent(data) {
+  console.log("fab_storeEvent", data);
   try {
     const response = await fetch(fab__endpoint, {
       method: "POST",
