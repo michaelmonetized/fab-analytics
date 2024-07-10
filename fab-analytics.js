@@ -14,7 +14,8 @@
 - [x] set cookie on first visit
  */
 
-const fab__endpoint = "https://www.hustlelaunch.com/api/post/visits/";
+const fab__endpoint =
+  "https://www.hustlelaunch.com/fab-analytics/api/post/visits/";
 
 /**
  * Generates a random session token
