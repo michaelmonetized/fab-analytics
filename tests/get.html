@@ -141,6 +141,7 @@
 
                     Object.keys(data[year][month][day]).forEach((event) => {
                       const eventElement = document.createElement("strong");
+                      eventElement.classList.add("font-bold");
                       eventElement.innerHTML = event;
 
                       results.appendChild(eventElement);
@@ -159,6 +160,16 @@
                             visitorElement.innerHTML = visitor;
 
                             results.appendChild(visitorElement);
+
+                            Object.keys(
+                              data[year][month][day][event][token][visitor]
+                            ).forEach((dimension) => {
+                              const dimensionElement =
+                                document.createElement("p");
+                              dimensionElement.innerHTML = dimension;
+
+                              results.appendChild(dimensionElement);
+                            });
                           });
                         }
                       );
