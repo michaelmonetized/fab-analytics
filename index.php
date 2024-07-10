@@ -8,7 +8,7 @@
  * @package fab-analytics
  * @author Hustle Launch <success@hustlelaunch.com>
  * @license GPL
- * @version 0.1.3-rc
+ * @version 0.1.4-rc
  * @url https://www.hustlelaunch.com
  * @maintainer @michaelmonetized
  */

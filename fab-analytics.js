@@ -1,7 +1,7 @@
 /**
  * @name fab-analytics.js
  * @description A dropin replacement for Google Analytics. Uses php endpoint to write json files for data storage
- * @version 0.1.3-rc
+ * @version 0.1.4-rc
  * @author Hustle Launch https://www.hustlelaunch.com
  * @license GPL
  *
@@ -14,10 +14,9 @@
 - [x] set cookie on first visit
  */
 
-console.log("elementor-activity-started", "okay");
+const fab__host = "https://www.hustlelaunch.com";
 
-const fab__endpoint =
-  "https://www.hustlelaunch.com/fab-analytics/api/post/visit/";
+const fab__endpoint = `${fab__host}/fab-analytics/api/post/visit/`;
 
 /**
  * Generates a random session token

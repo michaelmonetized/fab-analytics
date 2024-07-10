@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" class="p-0 m-0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover, user-scalable=no, minimal-ui, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>fab-analytics.js</title>
+    <script src="/fab.js?v=0.1.3-b-36"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
+  </head>
+  <body
+    class="bg-gray-100 text-gray-900 font-sans text-[21px] flex flex-col items-stretch justify-center h-dvh overflow-x-clip overflow-y-auto">
+    <div
+      class="flex flex-col items-stretch justify-start gap-md p-[21px] mx-auto md:w-[768px] bg-white rounded-md shadow-xl border-gray-300">
+      <h1 class="text-lg">Test fab-analytics.js</h1>
+
+      <a href="tel:+18283317985">Call 828-331-7985</a>
+      <a href="mailto:success@hustlelaunch.com">Email Hustle Launch</a>
+
+      <form id="domain">
+        <label for="name">Name</label>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          required
+          class="w-full rounded-md border-gray-300 p-md text-lg border-1"
+          placeholder="(required) Your Actual Real Name" />
+
+        <button
+          type="submit"
+          class="rounded-md bg-blue-500 px-[42px] py-[11px] text-white">
+          Submit
+        </button>
+      </form>
+    </div>
+
+    <div id="results-wrapper">
+      <h2>Results</h2>
+      <div id="results"></div>
+    </div>
+
+    <script>
+      const form = document.getElementById("domain");
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const name = form.getElementById("name").value;
+
+        fetch(`/api/get?domain=${name}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const results = document.getElementById("results");
+
+            results.innerHTML = "";
+
+            Object.keys(data).forEach((year) => {
+              const yearElement = document.createElement("h3");
+              yearElement.innerHTML = year;
+
+              results.appendChild(yearElement);
+
+              Object.keys(data[year]).forEach((month) => {
+                const monthElement = document.createElement("h4");
+                monthElement.innerHTML = month;
+
+                results.appendChild(monthElement);
+
+                Object.keys(data[year][month]).forEach((day) => {
+                  const dayElement = document.createElement("h5");
+                  dayElement.innerHTML = day;
+
+                  results.appendChild(dayElement);
+
+                  Object.keys(data[year][month][day]).forEach((event) => {
+                    const eventElement = document.createElement("h6");
+                    eventElement.innerHTML = event;
+
+                    results.appendChild(eventElement);
+
+                    Object.keys(data[year][month][day][event]).forEach(
+                      (token) => {
+                        const tokenElement = document.createElement("h6");
+                        tokenElement.innerHTML = token;
+
+                        results.appendChild(tokenElement);
+                      }
+                    );
+                  });
+                });
+              });
+            });
+          });
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        fetch(`/api/get/`)
+          .then((response) => response.json())
+          .then((data) => {
+            const results = document.getElementById("results");
+
+            results.innerHTML = "";
+
+            Object.keys(data).forEach((year) => {
+              const yearElement = document.createElement("h3");
+              yearElement.innerHTML = year;
+
+              results.appendChild(yearElement);
+
+              Object.keys(data[year]).forEach((month) => {
+                const monthElement = document.createElement("h4");
+                monthElement.innerHTML = month;
+
+                results.appendChild(monthElement);
+
+                Object.keys(data[year][month]).forEach((day) => {
+                  const dayElement = document.createElement("h5");
+                  dayElement.innerHTML = day;
+
+                  results.appendChild(dayElement);
+
+                  Object.keys(data[year][month][day]).forEach((event) => {
+                    const eventElement = document.createElement("h6");
+                    eventElement.innerHTML = event;
+
+                    results.appendChild(eventElement);
+
+                    Object.keys(data[year][month][day][event]).forEach(
+                      (token) => {
+                        const tokenElement = document.createElement("h6");
+                        tokenElement.innerHTML = token;
+
+                        results.appendChild(tokenElement);
+                      }
+                    );
+                  });
+                });
+              });
+            });
+          });
+      });
+    </script>
+  </body>
+</html>
