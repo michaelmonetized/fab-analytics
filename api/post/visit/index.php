@@ -13,7 +13,7 @@
  * @maintainer @michaelmonetized
  */
 $now = trim(microtime());
-$plugin_path = str_replace("/api/post/visit/", '', __DIR__);
+$plugin_path = str_replace("/api/post/visit", '', __DIR__);
 
 // get json from phpinput
 $json = file_get_contents('php://input');
