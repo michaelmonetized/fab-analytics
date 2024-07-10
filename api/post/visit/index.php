@@ -12,7 +12,8 @@
  * @url https://www.hustlelaunch.com
  * @maintainer @michaelmonetized
  */
-$now = microtime();
+$now = trim(microtime());
+$plugin_path = str_replace("/api/post/visit/", '', __DIR__);
 
 // get json from phpinput
 $json = file_get_contents('php://input');
@@ -43,11 +44,15 @@ $domain = $data->domain;
 $token = $data->session_token;
 
 // get identifier
-$identifier = "{$domain}-{$token}-{$now}";
+$identifier = "{$token}-{$now}";
 
 // get json file
-$path = str_replace('/api/post/visit/', '', __DIR__) . '/logs';
+$path = "{$plugin_path}/logs/{$domain}";
 $file = "{$path}/{$identifier}.json";
+
+if (!is_dir($path)) {
+  mkdir($path, 0755, true);
+}
 
 // write json to file
 if (!(file_put_contents($file, $json))) {
@@ -88,5 +93,6 @@ header('Access-Control-Allow-Origin: *');
 echo json_encode([
   "file" => $file,
   "contents" => file_get_contents($file),
-  "data" => $data
+  "data" => $data,
+  "plugin" => $plugin_path,
 ]);
