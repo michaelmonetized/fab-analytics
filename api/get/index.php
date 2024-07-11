@@ -94,6 +94,22 @@ function list_all_clients()
       }
 
       $stats['data'] = $data;
+
+      if ($data->category === 'form') {
+        $filename = basename($file);
+        $filename_parts = explode("-", $filename);
+        $event_microtime = $filename_parts[1];
+        $event_microtime_parts = explode(" ", $event_microtime);
+        $event_microtime_seconds = intval($event_microtime_parts[1]);
+
+        $form_data = [
+          'time' => $event_microtime_seconds,
+        ];
+
+        $form_data += (array) $data->data;
+
+        $stats['forms'][] = (object) $form_data;
+      }
     }
 
     $stats['unique_sessions'] = count(array_unique($pageviews));

@@ -12,15 +12,15 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
   </head>
   <body
-    class="bg-gray-100 text-gray-900 font-sans text-[21px] flex flex-col items-stretch justify-center min-h-dvh gap-md">
+    class="bg-gray-100 text-gray-900 font-sans text-[21px] flex flex-col items-stretch justify-center min-h-dvh gap-[21px]">
     <div
-      class="flex flex-col items-stretch justify-start gap-md p-[21px] mx-auto md:w-[768px] bg-white rounded-md shadow-xl border-gray-300">
+      class="flex flex-col items-stretch justify-start gap-[21px] p-[21px] mx-auto md:w-[768px] bg-white rounded-xl shadow-xl border-gray-300">
       <h1 class="text-lg">Test fab-analytics api get</h1>
     </div>
 
     <div
       id="results-wrapper"
-      class="flex flex-col items-stretch justify-start gap-md p-[21px] mx-auto md:w-[1170px] bg-white rounded-md shadow-xl border-gray-300">
+      class="flex flex-col items-stretch justify-start gap-[21px] p-[21px] mx-auto md:w-[1170px] bg-white rounded-xl shadow-xl border-gray-300">
       <h1 class="text-lg">Dashboard</h1>
       <div class="flex flex-row items-stretch justify-start">
         <div class="grow">
@@ -32,57 +32,73 @@
         </div>
       </div>
 
-      <div class="totals grid grid-cols-6 gap-md text-center">
+      <div class="totals grid grid-cols-6 gap-[21px] text-center">
         <div class="domains-total flex flex-col items-stretch justify-center">
           <div
-            class="count totals-count total-domains text-4xl font-black grow"></div>
+            class="count totals-count total-domains text-4xl font-black grow">
+            0
+          </div>
           <div class="font-thin">Domains</div>
         </div>
 
         <div class="pageviews-total flex flex-col items-stretch justify-center">
           <div
-            class="count totals-count total-pageviews text-4xl font-black grow"></div>
+            class="count totals-count total-pageviews text-4xl font-black grow">
+            0
+          </div>
           <div class="font-thin">Pageviews</div>
         </div>
 
         <div class="sessions-total flex flex-col items-stretch justify-center">
           <div
-            class="count totals-count total-sessions text-4xl font-black grow"></div>
+            class="count totals-count total-sessions text-4xl font-black grow">
+            0
+          </div>
           <div class="font-thin">Sessions</div>
         </div>
 
         <div class="visitors-total flex flex-col items-stretch justify-center">
           <div
-            class="count totals-count total-visitors text-4xl font-black grow"></div>
+            class="count totals-count total-visitors text-4xl font-black grow">
+            0
+          </div>
           <div class="font-thin">Visitors</div>
         </div>
 
         <div
           class="conversions-total flex flex-col items-stretch justify-center">
           <div
-            class="count totals-count total-conversions text-4xl font-black grow"></div>
+            class="count totals-count total-conversions text-4xl font-black grow">
+            0
+          </div>
           <div class="font-thin">Conversions</div>
         </div>
 
         <div
-          class="flex flex-col items-stretch justify-center gap-md text-left">
+          class="flex flex-col items-stretch justify-center gap-[21px] text-left">
           <div class="calls-total flex flex-row items-stretch justify-center">
             <div class="grow font-thin">Calls</div>
             <div
-              class="count totals-count total-calls text-2xl font-black text-right"></div>
+              class="count totals-count total-calls text-2xl font-black text-right">
+              0
+            </div>
           </div>
 
           <div class="emails-total flex flex-row items-stretch justify-center">
             <div class="grow font-thin">Emails</div>
             <div
-              class="count totals-count total-emails text-2xl font-black text-right"></div>
+              class="count totals-count total-emails text-2xl font-black text-right">
+              0
+            </div>
           </div>
 
           <div
             class="submissions-total flex flex-row items-stretch justify-center">
             <div class="grow font-thin">Submissions</div>
             <div
-              class="count totals-count total-submissions text-2xl font-black text-right"></div>
+              class="count totals-count total-submissions text-2xl font-black text-right">
+              0
+            </div>
           </div>
         </div>
       </div>
@@ -91,81 +107,122 @@
 
     <template id="result-template">
       <div class="result-item">
-        <div class="accordion-title">
-          <div>
+        <div class="accordion-title flex flex-row items-center justify-between">
+          <div class="grow">
             <h2 class="domain text-4xl">{{domain_name}}</h2>
           </div>
           <div>
-            <div>
-              <img src="view.svg" />
-            </div>
+            <img src="view.svg" />
           </div>
         </div>
         <div class="data">
-          <div class="data-summary grid grid-cols-6 gap-md text-center">
-            <div class="summary-item pageviews">
-              <div>{{pageviews}}</div>
+          <div
+            class="data-summary grid grid-cols-5 gap-[21px] text-center w-full">
+            <div
+              class="summary-item pageviews p-[21px] border-1 border-gray-300 rounded-xl shadow-lg flex flex-col items-stretch justify-start">
+              <div
+                class="font-black text-4xl grow summary-count flex items-center justify-center">
+                <span>{{pageviews}}</span>
+              </div>
               <div>page views</div>
             </div>
-            <div class="summary-item unique-sessions">
-              <div>{{unique_sessions}}</div>
+            <div
+              class="summary-item unique-sessions p-[21px] border-1 border-gray-300 rounded-xl shadow-lg flex flex-col items-stretch justify-start">
+              <div
+                class="font-black text-4xl grow summary-count flex items-center justify-center">
+                <span>{{unique_sessions}}</span>
+              </div>
               <div>sessions</div>
             </div>
-            <div class="summary-item unique-visitors">
-              <div>{{unique_visitors}}</div>
+            <div
+              class="summary-item unique-visitors p-[21px] border-1 border-gray-300 rounded-xl shadow-lg flex flex-col items-stretch justify-start">
+              <div
+                class="font-black text-4xl grow summary-count flex items-center justify-center">
+                <span>{{unique_visitors}}</span>
+              </div>
               <div>visitors</div>
             </div>
-            <div class="summary-item conversions">
-              <div>{{conversions}}</div>
+            <div
+              class="summary-item conversions p-[21px] border-1 border-gray-300 rounded-xl shadow-lg flex flex-col items-stretch justify-start">
+              <div
+                class="font-black text-4xl grow summary-count flex items-center justify-center">
+                <span>{{conversions}}</span>
+              </div>
               <div>conversions</div>
             </div>
-            <div class="summary-stack">
-              <div class="summary-item calls">
-                <div>{{calls}}</div>
-                <div>calls</div>
+            <div
+              class="summary-stack flex flex-col items-stretch justify-start gap-[21px] text-left">
+              <div
+                class="summary-item calls shadow-xl rounded-xl p-[11px] flex flex-row items-center justofy-start">
+                <div class="grow">calls</div>
+                <div class="font-black text-3xl text-right summary-count">
+                  {{calls}}
+                </div>
               </div>
-              <div class="summary-item emails">
-                <div>{{emails}}</div>
-                <div>emails</div>
+              <div
+                class="summary-item emails shadow-xl rounded-xl p-[11px] flex flex-row items-center justofy-start">
+                <div class="grow">emails</div>
+                <div class="font-black text-3xl text-right summary-count">
+                  {{emails}}
+                </div>
               </div>
-              <div class="summary-item submissions">
-                <div>{{submissions}}</div>
-                <div>submissions</div>
+              <div
+                class="summary-item submissions shadow-xl rounded-xl p-[11px] flex flex-row items-center justofy-start">
+                <div class="grow">submissions</div>
+                <div class="font-black text-3xl text-right summary-count">
+                  {{submissions}}
+                </div>
               </div>
-              <div class="summary-item conversion-rate">
-                <div>{{conversion_rate}}</div>
-                <div>conversion rate</div>
+              <div
+                class="summary-item conversion-rate shadow-xl rounded-xl p-[11px] flex flex-row items-center justofy-start">
+                <div class="grow">conversion rate</div>
+                <div class="font-black text-3xl text-right summary-count">
+                  {{conversion_rate}}
+                </div>
               </div>
-            </div>
-          </div>
-          <div class="data-leads">
-            <div class="accordion-title">
-              <div>
-                <h3>Leads</h3>
-              </div>
-              <div>
-                <img src="view.svg" />
-              </div>
-            </div>
-            <div class="data-leads-table">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Page</th>
-                    <th>Name</th>
-                    <th>Phone</th>
-                    <th>Email</th>
-                    <th>Message</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
             </div>
           </div>
         </div>
       </div>
+    </template>
+
+    <template id="leads-template">
+      <div class="data-leads">
+        <div class="accordion-title">
+          <div>
+            <h3>Leads</h3>
+          </div>
+          <div>
+            <img src="view.svg" />
+          </div>
+        </div>
+
+        <div class="data-leads-table">
+          <table class="w-full">
+            <thead class="text-left">
+              <tr>
+                <th>Date</th>
+                <th>Page</th>
+              </tr>
+            </thead>
+
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </template>
+
+    <template id="lead-actions-template">
+      <td>
+        <div class="lead-actions">
+          <button class="lead-action view"><img src="view.svg" /></button>
+          <button class="lead-action reply"><img src="reply.svg" /></button>
+          <button class="lead-action fwd"><img src="fwd.svg" /></button>
+          <button class="lead-action archive"><img src="archive.svg" /></button>
+          <button class="lead-action flag"><img src="flag.svg" /></button>
+          <button class="lead-action delete"><img src="delete.svg" /></button>
+        </div>
+      </td>
     </template>
 
     <script>
@@ -180,6 +237,7 @@
         results.innerHTML = ""; // Clear any previous content
         const template = document.getElementById("result-template").content;
         const totals = document.querySelector(".totals");
+
         let $total_domains = totals.querySelector(".domains-total .count"),
           $total_pageviews = totals.querySelector(".pageviews-total .count"),
           $total_sessions = totals.querySelector(".sessions-total .count"),
@@ -194,6 +252,7 @@
           );
 
         $total_domains.textContent = Object.keys(data).length;
+
         const domainsArray = Object.values(data);
 
         $total_pageviews.textContent = domainsArray.reduce(
@@ -234,56 +293,87 @@
         for (const domain in data) {
           const clone = document.importNode(template, true);
           const domainData = data[domain];
+
           const conversionRate = (
-            domainData.conversions / domainData.unique_sessions
+            (domainData.conversions / domainData.unique_sessions) *
+            100
           ).toFixed(2);
 
           clone.querySelector(".domain").textContent = domain;
-          clone.querySelector(".pageviews div").textContent =
+          clone.querySelector(".pageviews .summary-count").textContent =
             domainData.pageviews;
-          clone.querySelector(".unique-sessions div").textContent =
+          clone.querySelector(".unique-sessions .summary-count").textContent =
             domainData.unique_sessions;
-          clone.querySelector(".unique-visitors div").textContent =
+          clone.querySelector(".unique-visitors .summary-count").textContent =
             domainData.unique_visitors;
-          clone.querySelector(".conversions div").textContent =
+          clone.querySelector(".conversions .summary-count").textContent =
             domainData.conversions;
-          clone.querySelector(".calls div").textContent = domainData.calls;
-          clone.querySelector(".emails div").textContent = domainData.emails;
-          clone.querySelector(".submissions div").textContent =
+          clone.querySelector(".calls .summary-count").textContent =
+            domainData.calls;
+          clone.querySelector(".emails .summary-count").textContent =
+            domainData.emails;
+          clone.querySelector(".submissions .summary-count").textContent =
             domainData.submissions;
-          clone.querySelector(".conversion-rate div").textContent =
-            conversionRate;
+          clone.querySelector(".conversion-rate .summary-count").textContent =
+            conversionRate + "%";
 
-          const tbody = clone.querySelector("tbody");
-          for (const sessionToken in domainData.data) {
-            const lead = domainData.data[sessionToken];
-            if (lead.event === "form") {
+          if (
+            domainData.hasOwnProperty("forms") &&
+            domainData.forms.length > 0
+          ) {
+            console.log(domainData.forms);
+
+            const leads_template =
+              document.getElementById("leads-template").content;
+            const data_leads = document.importNode(leads_template, true);
+            clone.appendChild(data_leads);
+
+            const tbody = data_leads.querySelector("tbody");
+            const form_events = domainData.forms;
+
+            form_events.forEach((form_event_data) => {
               const row = document.createElement("tr");
-              row.dataset.leadId = lead.session_token + lead.session_time;
-              row.dataset.status = "sent";
 
-              row.innerHTML = `
-            <td>${lead.session_start}</td>
-            <td>${lead.title}</td>
-            <td>${lead.data.name}</td>
-            <td>${lead.data.phone || ""}</td>
-            <td>${lead.data.email || ""}</td>
-            <td>${lead.data.message || ""}</td>
-            <td>
-              <div class="lead-actions">
-                <button class="lead-action view"><img src="view.svg" /></button>
-                <button class="lead-action reply"><img src="reply.svg" /></button>
-                <button class="lead-action fwd"><img src="fwd.svg" /></button>
-                <button class="lead-action archive"><img src="archive.svg" /></button>
-                <button class="lead-action flag"><img src="flag.svg" /></button>
-                <button class="lead-action delete"><img src="delete.svg" /></button>
-              </div>
-            </td>
-          `;
+              row.dataset.time = form_event_data.time;
+              row.dataset.status = form_event_data.event;
 
               tbody.appendChild(row);
-            }
+
+              row.innerHTML = `<td>${form_event_data.time}</td><td>${form_event_data.event}</td>`;
+
+              const head_row = data_leads.querySelector("thead tr");
+
+              Object.keys(form_event_data.data).forEach((key) => {
+                if (key.includes("form_fields[")) {
+                  const field_name = key
+                    .replace("form_fields[", "")
+                    .replace("]", "");
+
+                  const field_value = form_event_data.data[key];
+
+                  row.innerHTML += `<td>${field_name}</td><td>${field_value}</td>`;
+
+                  if (!head_row.innerHTML.includes(field_name)) {
+                    head_row.innerHTML += `<th class="${field_name}">${field_name}</th>`;
+                  }
+                }
+              });
+
+              const lead_actions_template = document.getElementById(
+                "lead-actions-template"
+              ).content;
+
+              const lead_actions = document.importNode(
+                lead_actions_template,
+                true
+              );
+
+              row.appendChild(lead_actions);
+
+              head_row.innerHTML += `<th>&nbsp;</th>`;
+            });
           }
+
           results.appendChild(clone);
         }
       }
