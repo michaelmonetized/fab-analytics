@@ -333,23 +333,73 @@
             tbody.innerHTML = "";
 
             const form_events = domainData.forms;
+            const ele_pattern = /form_fields\[(.*)\]/;
+            const acf_pattern = /acf\[(.*)\]/g;
 
             const acceptable_field_keys = [
-              /form_fields\[.*\]/,
+              ele_pattern,
+              acf_pattern,
               /(name|email|phone|message|pass|date|time)/,
             ];
+
+            const known_acf_labels = {
+              field_6613c21fa5dd0: "to",
+              "field_6613c25da5dd1][field_65fae707f6a6c": "first",
+              "field_6613c25da5dd1][field_65faf9a0f6a6d": "last",
+              "field_6613c25da5dd1][field_65faf9b3f6a6e": "phone",
+              "field_6613c25da5dd1][field_65faf9baf6a6f": "email",
+              "field_6613c25da5dd1][field_65faf9c4f6a70": "b|s",
+              "field_6613c25da5dd1][field_65fafa0bf6a71": "type",
+              "field_6613c25da5dd1][field_66731663a7b86": "lease",
+              "field_6613c25da5dd1][field_65fb04c8b57a4": "range",
+              "field_6613c25da5dd1][field_65fb0568df3cb": "location",
+              "field_6613c25da5dd1][field_65fb057b24704": "funding",
+              "field_6613c25da5dd1][field_65fb05bc92209": "value",
+              "field_6613c25da5dd1][field_65fb05c39220a": "address",
+            };
 
             // Collect all unique column names, excluding 'actions'
             const allColumns = new Set(["time", "page"]);
 
             form_events.forEach((form_event_data) => {
-              const acceptableFields = Object.keys(
-                form_event_data.fields
-              ).filter((key) =>
-                acceptable_field_keys.some((regex) => regex.test(key))
-              );
+              Object.keys(form_event_data.fields).forEach((key) => {
+                if (
+                  acceptable_field_keys.some((regex) => regex.test(key)) &&
+                  form_event_data.fields[key] !== ""
+                ) {
+                  let field_name = key
+                    .replace(ele_pattern, "$1")
+                    .replace(acf_pattern, "$1");
 
-              // Check if the form_event_data contains at least one acceptable field key with a non-empty value
+                  if (known_acf_labels[field_name]) {
+                    field_name = known_acf_labels[field_name];
+                  }
+
+                  // Add to the set
+                  allColumns.add(field_name);
+                }
+              });
+            });
+
+            // Convert Set to Array and add 'actions' at the end
+            const columnArray = Array.from(allColumns);
+            columnArray.push("actions");
+
+            // Create header row
+            const headerRow = document.createElement("tr");
+            allColumns.forEach((column) => {
+              const th = document.createElement("th");
+              th.textContent = column;
+              th.className = column;
+              headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+
+            // Create data rows
+            console.log(form_events);
+            form_events.forEach((form_event_data) => {
+              console.log(form_event_data);
+
               const rowHasAtLeastOneAcceptableKey = () => {
                 let pass = false;
 
@@ -358,7 +408,7 @@
                     acceptable_field_keys.some((regex) => regex.test(key))
                 );
 
-                // At least one key has a value
+                // at least one key has a value
                 if (foundKeys.length > 0) {
                   foundKeys.forEach((key) => {
                     if (form_event_data.fields[key] !== "") {
@@ -373,86 +423,53 @@
               };
 
               if (!rowHasAtLeastOneAcceptableKey()) {
-                return; // Skip this row
+                return;
               }
-
-              const hasNonEmptyAcceptableField = acceptableFields.some(
-                (key) => form_event_data.fields[key] !== ""
+              const row = document.createElement("tr");
+              row.dataset.time = form_event_data.time;
+              row.dataset.status = form_event_data.status;
+              row.classList.add(
+                form_event_data.status == "conversion"
+                  ? "bg-green-100"
+                  : "bg-red-100"
               );
 
-              if (hasNonEmptyAcceptableField) {
-                acceptableFields.forEach((key) => {
-                  if (form_event_data.fields[key] !== "") {
-                    const field_name = key
-                      .replace("form_fields[", "")
-                      .replace("]", "");
-                    allColumns.add(field_name);
-                  }
-                });
-              }
-
-              // Convert Set to Array and add 'actions' at the end
-              const columnArray = Array.from(allColumns);
-              columnArray.push("actions");
-
-              // Create header row
-              const headerRow = document.createElement("tr");
               allColumns.forEach((column) => {
-                const th = document.createElement("th");
-                th.textContent = column;
-                th.className = column;
-                headerRow.appendChild(th);
+                const td = document.createElement("td");
+                td.className = column;
+
+                switch (column) {
+                  case "time":
+                    td.textContent = form_event_data.time
+                      ? new Date(form_event_data.time).toLocaleString()
+                      : "";
+                    break;
+                  case "page":
+                    td.textContent = form_event_data.page || "";
+                    break;
+                  case "actions":
+                    td.innerHTML = `
+                <div class="lead-actions">
+                  <button class="lead-action view"><img src="view.svg" /></button>
+                  <button class="lead-action reply"><img src="reply.svg" /></button>
+                  <button class="lead-action fwd"><img src="fwd.svg" /></button>
+                  <button class="lead-action archive"><img src="archive.svg" /></button>
+                  <button class="lead-action flag"><img src="flag.svg" /></button>
+                  <button class="lead-action delete"><img src="delete.svg" /></button>
+                </div>`;
+                    break;
+                  default:
+                    const fieldKey = `form_fields[${column}]`;
+                    td.textContent =
+                      form_event_data.fields[fieldKey] ||
+                      form_event_data.fields[column] ||
+                      "";
+                }
+
+                row.appendChild(td);
               });
-              thead.appendChild(headerRow);
 
-              // Create data rows
-              form_events.forEach((form_event_data) => {
-                const row = document.createElement("tr");
-                row.dataset.time = form_event_data.time;
-                row.dataset.status = form_event_data.status;
-                row.classList.add(
-                  form_event_data.status == "conversion"
-                    ? "bg-green-100"
-                    : "bg-red-100"
-                );
-
-                allColumns.forEach((column) => {
-                  const td = document.createElement("td");
-                  td.className = column;
-
-                  switch (column) {
-                    case "time":
-                      td.textContent = form_event_data.time
-                        ? new Date(form_event_data.time).toLocaleString()
-                        : "";
-                      break;
-                    case "page":
-                      td.textContent = form_event_data.page || "";
-                      break;
-                    case "actions":
-                      td.innerHTML = `
-              <div class="lead-actions">
-                <button class="lead-action view"><img src="view.svg" /></button>
-                <button class="lead-action reply"><img src="reply.svg" /></button>
-                <button class="lead-action fwd"><img src="fwd.svg" /></button>
-                <button class="lead-action archive"><img src="archive.svg" /></button>
-                <button class="lead-action flag"><img src="flag.svg" /></button>
-                <button class="lead-action delete"><img src="delete.svg" /></button>
-              </div>`;
-                      break;
-                    default:
-                      const fieldKey = `form_fields[${column}]`;
-                      td.textContent =
-                        form_event_data.fields[fieldKey] ||
-                        form_event_data.fields[column] ||
-                        "";
-                  }
-
-                  row.appendChild(td);
-                });
-
-                tbody.appendChild(row);
-              });
+              tbody.appendChild(row);
             });
           }
 

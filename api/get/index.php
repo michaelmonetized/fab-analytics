@@ -56,6 +56,10 @@ function list_all_clients()
 
       $data = json_decode($contents);
 
+      if (!$data) {
+        continue;
+      }
+
       $event = $data->event;
 
       // fill counts
