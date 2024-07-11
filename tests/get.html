@@ -22,7 +22,16 @@
       id="results-wrapper"
       class="flex flex-col items-stretch justify-start gap-md p-[21px] mx-auto md:w-[1170px] bg-white rounded-md shadow-xl border-gray-300">
       <h1 class="text-lg">Dashboard</h1>
-      <h2>Totals</h2>
+      <div class="flex flex-row items-stretch justify-start">
+        <div class="grow">
+          <h2>Totals</h2>
+        </div>
+        <div>
+          <input type="date" class="date-picker" name="start" />
+          <input type="date" class="date-picker" name="end" />
+        </div>
+      </div>
+
       <div class="totals grid grid-cols-6 gap-md text-center">
         <div class="domains-total flex flex-col items-stretch justify-center">
           <div
@@ -88,16 +97,12 @@
           </div>
           <div>
             <div>
-              <input type="date" class="date-picker" name="start" />
-              <input type="date" class="date-picker" name="end" />
-            </div>
-            <div>
               <img src="view.svg" />
             </div>
           </div>
         </div>
         <div class="data">
-          <div class="data-summary">
+          <div class="data-summary grid grid-cols-6 gap-md text-center">
             <div class="summary-item pageviews">
               <div>{{pageviews}}</div>
               <div>page views</div>
@@ -175,41 +180,53 @@
         results.innerHTML = ""; // Clear any previous content
         const template = document.getElementById("result-template").content;
         const totals = document.querySelector(".totals");
-        let $total_domains = totals.querySelector(".domain-totals"),
-          $total_pageviews = totals.querySelector(".pageviews-totals"),
-          $total_sessions = totals.querySelector(".sessions-totals"),
-          $total_visitors = totals.querySelector(".visitors-totals"),
-          $total_conversions = totals.querySelector(".conversions-totals"),
-          $total_calls = totals.querySelector(".calls-totals"),
-          $total_emails = totals.querySelector(".emails-totals"),
-          $total_submissions = totals.querySelector(".submissions-totals");
+        let $total_domains = totals.querySelector(".domains-total .count"),
+          $total_pageviews = totals.querySelector(".pageviews-total .count"),
+          $total_sessions = totals.querySelector(".sessions-total .count"),
+          $total_visitors = totals.querySelector(".visitors-total .count"),
+          $total_conversions = totals.querySelector(
+            ".conversions-total .count"
+          ),
+          $total_calls = totals.querySelector(".calls-total .count"),
+          $total_emails = totals.querySelector(".emails-total .count"),
+          $total_submissions = totals.querySelector(
+            ".submissions-total .count"
+          );
 
         $total_domains.textContent = Object.keys(data).length;
-        $total_pageviews.textContent = data.reduce(
+        const domainsArray = Object.values(data);
+
+        $total_pageviews.textContent = domainsArray.reduce(
           (acc, domain) => acc + domain.pageviews,
           0
         );
-        $total_unique_sessions.textContent = data.reduce(
+
+        $total_sessions.textContent = domainsArray.reduce(
           (acc, domain) => acc + domain.unique_sessions,
           0
         );
-        $total_unique_visitors.textContent = data.reduce(
+
+        $total_visitors.textContent = domainsArray.reduce(
           (acc, domain) => acc + domain.unique_visitors,
           0
         );
-        $total_conversions.textContent = data.reduce(
+
+        $total_conversions.textContent = domainsArray.reduce(
           (acc, domain) => acc + domain.conversions,
           0
         );
-        $total_calls.textContent = data.reduce(
+
+        $total_calls.textContent = domainsArray.reduce(
           (acc, domain) => acc + domain.calls,
           0
         );
-        $total_emails.textContent = data.reduce(
+
+        $total_emails.textContent = domainsArray.reduce(
           (acc, domain) => acc + domain.emails,
           0
         );
-        $total_submissions.textContent = data.reduce(
+
+        $total_submissions.textContent = domainsArray.reduce(
           (acc, domain) => acc + domain.submissions,
           0
         );
