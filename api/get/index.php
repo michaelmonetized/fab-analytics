@@ -63,9 +63,9 @@ function list_all_clients()
         case 'pageview':
           $stats['pageviews']++;
 
-          $pageviews[] = $data->session_token;
+          $pageviews[] = $data->session_start;
 
-          $visitors[] = $data->session_start;
+          $visitors[] = $data->session_token;
 
           break;
         case 'conversion':
