@@ -329,7 +329,7 @@
             conversionRate + "%";
 
           if (
-            (domain.includes("oxstu") || domain.includes("alay.co")) &&
+            //(domain.includes("oxstu") || domain.includes("alay.co")) &&
             domainData.hasOwnProperty("forms") &&
             domainData.forms.length > 0
           ) {
@@ -348,7 +348,7 @@
 
             const form_events = domainData.forms;
             const ele_pattern = /form_fields\[(.*)\]/;
-            const acf_pattern = /acf\[(.*)\]/g;
+            const acf_pattern = /acf\[(.*)\]/;
 
             const acceptable_field_keys = [
               ele_pattern,
@@ -385,10 +385,6 @@
                     .replace(ele_pattern, "$1")
                     .replace(acf_pattern, "$1");
 
-                  if (known_acf_labels[field_name]) {
-                    field_name = known_acf_labels[field_name];
-                  }
-
                   // Add to the set
                   allColumns.add(field_name);
                 }
@@ -403,7 +399,7 @@
             const headerRow = document.createElement("tr");
             allColumns.forEach((column) => {
               const th = document.createElement("th");
-              th.textContent = column;
+              th.textContent = known_acf_labels[column] || column;
               th.className = column;
               headerRow.appendChild(th);
             });

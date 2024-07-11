@@ -8,7 +8,6 @@ if (isset($data)) {
     'headers' => [
       'From: success@hustlelaunch.com',
       'Content-Type: text/html; charset=UTF-8',
-      "Reply-To: " . $data->data->email || "success@hustlelaunch.com",
     ],
   ];
 
@@ -16,7 +15,6 @@ if (isset($data)) {
     $mail['body'] .= $key . ": " . $value . "\n";
   }
 
-  $mail['body'] .= "\n\n" . $data->ip;
   $mail['body'] .= "\n\n" . $data->pathname;
 
   mail($mail['to'], $mail['subject'], $mail['body'], $mail['headers']);
