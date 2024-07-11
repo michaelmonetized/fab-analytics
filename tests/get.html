@@ -23,56 +23,59 @@
       class="flex flex-col items-stretch justify-start gap-md p-[21px] mx-auto md:w-[768px] bg-white rounded-md shadow-xl border-gray-300">
       <h1 class="text-lg">Dashboard</h1>
       <h2>Totals</h2>
-      <div class="totals grid grid-columns-3 gap-md text-center">
+      <div class="totals grid grid-cols-6 gap-md text-center">
         <div class="domains-total flex flex-col items-stretch justify-center">
           <div
-            class="count totals-count total-domains text-4xl font-black grid"></div>
+            class="count totals-count total-domains text-4xl font-black grow"></div>
           <div class="font-thin">Domains</div>
         </div>
 
         <div class="pageviews-total flex flex-col items-stretch justify-center">
           <div
-            class="count totals-count total-pageviews text-4xl font-black grid"></div>
+            class="count totals-count total-pageviews text-4xl font-black grow"></div>
           <div class="font-thin">Pageviews</div>
         </div>
 
         <div class="sessions-total flex flex-col items-stretch justify-center">
           <div
-            class="count totals-count total-sessions text-4xl font-black grid"></div>
+            class="count totals-count total-sessions text-4xl font-black grow"></div>
           <div class="font-thin">Sessions</div>
         </div>
 
         <div class="visitors-total flex flex-col items-stretch justify-center">
           <div
-            class="count totals-count total-visitors text-4xl font-black grid"></div>
+            class="count totals-count total-visitors text-4xl font-black grow"></div>
           <div class="font-thin">Visitors</div>
         </div>
 
         <div
           class="conversions-total flex flex-col items-stretch justify-center">
           <div
-            class="count totals-count total-conversions text-4xl font-black grid"></div>
+            class="count totals-count total-conversions text-4xl font-black grow"></div>
           <div class="font-thin">Conversions</div>
         </div>
 
-        <div class="flex flex-col items-stretch justify-center gap-md">
-          <div class="calls-total flex flex-col items-stretch justify-center">
+        <div
+          class="flex flex-col items-stretch justify-center gap-md text-left">
+          <div
+            class="calls-total flex flex-row items-stretch justify-center text-right">
+            <div class="grow font-thin">Calls</div>
             <div
-              class="count totals-count total-calls text-4xl font-black grid"></div>
-            <div class="font-thin">Calls</div>
-          </div>
-
-          <div class="emails-total flex flex-col items-stretch justify-center">
-            <div
-              class="count totals-count total-emails text-4xl font-black grid"></div>
-            <div class="font-thin">Emails</div>
+              class="count totals-count total-calls text-4xl font-black"></div>
           </div>
 
           <div
-            class="submissions-total flex flex-col items-stretch justify-center">
+            class="emails-total flex flex-row items-stretch justify-center text-right">
+            <div class="grow font-thin">Emails</div>
             <div
-              class="count totals-count total-submissions text-4xl font-black grid"></div>
-            <div class="font-thin">Submissions</div>
+              class="count totals-count total-emails text-4xl font-black"></div>
+          </div>
+
+          <div
+            class="submissions-total flex flex-row items-stretch justify-center text-right">
+            <div class="grow font-thin">Submissions</div>
+            <div
+              class="count totals-count total-submissions text-4xl font-black"></div>
           </div>
         </div>
       </div>
