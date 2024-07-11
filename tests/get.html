@@ -16,133 +16,262 @@
     <div
       class="flex flex-col items-stretch justify-start gap-md p-[21px] mx-auto md:w-[768px] bg-white rounded-md shadow-xl border-gray-300">
       <h1 class="text-lg">Test fab-analytics api get</h1>
-
-      <form id="domain">
-        <label for="name">Name</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          required
-          class="w-full rounded-md border-gray-300 p-md text-lg border-1"
-          placeholder="(required) Your Actual Real Name" />
-
-        <button
-          type="submit"
-          class="rounded-md bg-blue-500 px-[42px] py-[11px] text-white">
-          Submit
-        </button>
-      </form>
-
-      <div id="results-wrapper">
-        <h2>Results</h2>
-        <div id="results" class="divide-y-1 divide-gray-300"></div>
-      </div>
     </div>
 
-    <template id="result-item-template">
-      <div class="result-item p-[21px]" data-domain="" data-year="" data-month="" data-day="" data-event="">
-        <h2 class="domain text-4xl"></h2>
-        <h3 class="year text-3xl"></h3>
-        <h4 class="month text-2xl"></h4>
-        <h5 class="day text-xl"></h5>
-        <h6 class="event text-lg"></h6>
-        <p>
-          <strong class="visitor"></strong>
+    <div
+      id="results-wrapper"
+      class="flex flex-col items-stretch justify-start gap-md p-[21px] mx-auto md:w-[768px] bg-white rounded-md shadow-xl border-gray-300">
+      <h1 class="text-lg">Dashboard</h1>
+      <h2>Totals</h2>
+      <div class="totals grid grid-columns-3 gap-md text-center">
+        <div class="domains-total flex flex-col items-stretch justify-center">
+          <div
+            class="count totals-count total-domains text-4xl font-black grid"></div>
+          <div class="font-thin">Domains</div>
+        </div>
 
-          <dl class="dimensions">
-            <dt class="dimension-name"></dt>
-            <dd class="dimension-value"></dd>
-          </dl>
-        </p>
+        <div class="pageviews-total flex flex-col items-stretch justify-center">
+          <div
+            class="count totals-count total-pageviews text-4xl font-black grid"></div>
+          <div class="font-thin">Pageviews</div>
+        </div>
+
+        <div class="sessions-total flex flex-col items-stretch justify-center">
+          <div
+            class="count totals-count total-sessions text-4xl font-black grid"></div>
+          <div class="font-thin">Sessions</div>
+        </div>
+
+        <div class="visitors-total flex flex-col items-stretch justify-center">
+          <div
+            class="count totals-count total-visitors text-4xl font-black grid"></div>
+          <div class="font-thin">Visitors</div>
+        </div>
+
+        <div
+          class="conversions-total flex flex-col items-stretch justify-center">
+          <div
+            class="count totals-count total-conversions text-4xl font-black grid"></div>
+          <div class="font-thin">Conversions</div>
+        </div>
+
+        <div class="flex flex-col items-stretch justify-center gap-md">
+          <div class="calls-total flex flex-col items-stretch justify-center">
+            <div
+              class="count totals-count total-calls text-4xl font-black grid"></div>
+            <div class="font-thin">Calls</div>
+          </div>
+
+          <div class="emails-total flex flex-col items-stretch justify-center">
+            <div
+              class="count totals-count total-emails text-4xl font-black grid"></div>
+            <div class="font-thin">Emails</div>
+          </div>
+
+          <div
+            class="submissions-total flex flex-col items-stretch justify-center">
+            <div
+              class="count totals-count total-submissions text-4xl font-black grid"></div>
+            <div class="font-thin">Submissions</div>
+          </div>
+        </div>
+      </div>
+      <div id="results"></div>
+    </div>
+
+    <template id="result-template">
+      <div class="result-item">
+        <div class="accordion-title">
+          <div>
+            <h2 class="domain text-4xl">{{domain_name}}</h2>
+          </div>
+          <div>
+            <div>
+              <input type="date" class="date-picker" name="start" />
+              <input type="date" class="date-picker" name="end" />
+            </div>
+            <div>
+              <img src="view.svg" />
+            </div>
+          </div>
+        </div>
+        <div class="data">
+          <div class="data-summary">
+            <div class="summary-item pageviews">
+              <div>{{pageviews}}</div>
+              <div>page views</div>
+            </div>
+            <div class="summary-item unique-sessions">
+              <div>{{unique_sessions}}</div>
+              <div>sessions</div>
+            </div>
+            <div class="summary-item unique-visitors">
+              <div>{{unique_visitors}}</div>
+              <div>visitors</div>
+            </div>
+            <div class="summary-item conversions">
+              <div>{{conversions}}</div>
+              <div>conversions</div>
+            </div>
+            <div class="summary-stack">
+              <div class="summary-item calls">
+                <div>{{calls}}</div>
+                <div>calls</div>
+              </div>
+              <div class="summary-item emails">
+                <div>{{emails}}</div>
+                <div>emails</div>
+              </div>
+              <div class="summary-item submissions">
+                <div>{{submissions}}</div>
+                <div>submissions</div>
+              </div>
+              <div class="summary-item conversion-rate">
+                <div>{{conversion_rate}}</div>
+                <div>conversion rate</div>
+              </div>
+            </div>
+          </div>
+          <div class="data-leads">
+            <div class="accordion-title">
+              <div>
+                <h3>Leads</h3>
+              </div>
+              <div>
+                <img src="view.svg" />
+              </div>
+            </div>
+            <div class="data-leads-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Page</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </template>
 
     <script>
-      const form = document.getElementById("domain");
-
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const name = form.getElementById("name").value;
-
-        fetch(`/fab-analytics/api/get?domain=${name}`)
-          .then((response) => {
-            //console.log(response);
-            //console.log(response.json());
-            //console.log(response.text());
-            return response.json();
-          })
-          .then((data) => {
-            const results = document.getElementById("results");
-
-            results.innerHTML = "";
-
-            Object.keys(data).forEach((year) => {
-              const yearElement = document.createElement("h3");
-              yearElement.innerHTML = year;
-
-              results.appendChild(yearElement);
-
-              Object.keys(data[year]).forEach((month) => {
-                const monthElement = document.createElement("h4");
-                monthElement.innerHTML = month;
-
-                results.appendChild(monthElement);
-
-                Object.keys(data[year][month]).forEach((day) => {
-                  const dayElement = document.createElement("h5");
-                  dayElement.innerHTML = day;
-
-                  results.appendChild(dayElement);
-
-                  Object.keys(data[year][month][day]).forEach((event) => {
-                    const eventElement = document.createElement("h6");
-                    eventElement.innerHTML = event;
-
-                    results.appendChild(eventElement);
-
-                    Object.keys(data[year][month][day][event]).forEach(
-                      (token) => {
-                        const tokenElement = document.createElement("h6");
-                        tokenElement.innerHTML = token;
-
-                        results.appendChild(tokenElement);
-                      }
-                    );
-                  });
-                });
-              });
-            });
-          });
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch(`https://www.hustlelaunch.com/fab-analytics/api/get/`)
+          .then((response) => response.json())
+          .then((data) => createDashboard(data));
       });
 
-      document.addEventListener("DOMContentLoaded", () => {
-        fetch(`/fab-analytics/api/get/`)
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          const results = document.getElementById("results");
+      function createDashboard(data) {
+        const results = document.getElementById("results");
+        results.innerHTML = ""; // Clear any previous content
+        const template = document.getElementById("result-template").content;
+        const totals = document.querySelector(".totals");
+        const totalsCounts = totals.querySelectorAll(".totals-count");
+        const {
+          $total_domains,
+          $total_pageviews,
+          $total_unique_sessions,
+          $total_unique_visitors,
+          $total_conversions,
+          $total_calls,
+          $total_emails,
+          $total_submissions,
+        } = totalsCounts;
 
-          results.innerHTML = "";
+        $total_domains.textContent = Object.keys(data).length;
+        $total_pageviews.textContent = data.reduce(
+          (acc, domain) => acc + domain.pageviews,
+          0
+        );
+        $total_unique_sessions.textContent = data.reduce(
+          (acc, domain) => acc + domain.unique_sessions,
+          0
+        );
+        $total_unique_visitors.textContent = data.reduce(
+          (acc, domain) => acc + domain.unique_visitors,
+          0
+        );
+        $total_conversions.textContent = data.reduce(
+          (acc, domain) => acc + domain.conversions,
+          0
+        );
+        $total_calls.textContent = data.reduce(
+          (acc, domain) => acc + domain.calls,
+          0
+        );
+        $total_emails.textContent = data.reduce(
+          (acc, domain) => acc + domain.emails,
+          0
+        );
+        $total_submissions.textContent = data.reduce(
+          (acc, domain) => acc + domain.submissions,
+          0
+        );
 
-          const resultItemTemplate = document.getElementById("result-item-template");
+        for (const domain in data) {
+          const clone = document.importNode(template, true);
+          const domainData = data[domain];
+          const conversionRate = (
+            domainData.conversions / domainData.unique_sessions
+          ).toFixed(2);
 
-          Object.keys(data).forEach((domain) => {
-            const domainElement = resultItemTemplate.content.cloneNode(true);
-            domainElement.querySelector(".domain").innerHTML = domain;
+          clone.querySelector(".domain").textContent = domain;
+          clone.querySelector(".pageviews div").textContent =
+            domainData.pageviews;
+          clone.querySelector(".unique-sessions div").textContent =
+            domainData.unique_sessions;
+          clone.querySelector(".unique-visitors div").textContent =
+            domainData.unique_visitors;
+          clone.querySelector(".conversions div").textContent =
+            domainData.conversions;
+          clone.querySelector(".calls div").textContent = domainData.calls;
+          clone.querySelector(".emails div").textContent = domainData.emails;
+          clone.querySelector(".submissions div").textContent =
+            domainData.submissions;
+          clone.querySelector(".conversion-rate div").textContent =
+            conversionRate;
 
-            Object.keys(data.domain.year.month.day.event.token).forEach((visitor) => {
-              domainElement.querySelector(".year").innerHTML = data.domain.year;
-              domainElement.querySelector(".month").innerHTML = data.domain.month;
-              domainElement.querySelector(".day").innerHTML = data.domain.day;
-              domainElement.querySelector(".event").innerHTML = data.domain.event;
-              domainElement.querySelector(".visitor").innerHTML = visitor;
-            });
-        });
-      });
-      });
+          const tbody = clone.querySelector("tbody");
+          for (const sessionToken in domainData.data) {
+            const lead = domainData.data[sessionToken];
+            if (lead.event === "form") {
+              const row = document.createElement("tr");
+              row.dataset.leadId = lead.session_token + lead.session_time;
+              row.dataset.status = "sent";
+
+              row.innerHTML = `
+            <td>${lead.session_start}</td>
+            <td>${lead.title}</td>
+            <td>${lead.data.name}</td>
+            <td>${lead.data.phone || ""}</td>
+            <td>${lead.data.email || ""}</td>
+            <td>${lead.data.message || ""}</td>
+            <td>
+              <div class="lead-actions">
+                <button class="lead-action view"><img src="view.svg" /></button>
+                <button class="lead-action reply"><img src="reply.svg" /></button>
+                <button class="lead-action fwd"><img src="fwd.svg" /></button>
+                <button class="lead-action archive"><img src="archive.svg" /></button>
+                <button class="lead-action flag"><img src="flag.svg" /></button>
+                <button class="lead-action delete"><img src="delete.svg" /></button>
+              </div>
+            </td>
+          `;
+
+              tbody.appendChild(row);
+            }
+          }
+          results.appendChild(clone);
+        }
+      }
     </script>
   </body>
 </html>
