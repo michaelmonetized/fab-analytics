@@ -20,94 +20,107 @@
 
     <div
       id="results-wrapper"
-      class="flex flex-col items-stretch justify-start gap-[21px] p-[21px] mx-auto md:w-[1170px] bg-white rounded-xl shadow-xl border-gray-300">
+      class="flex flex-col items-stretch justify-start gap-[21px] mx-auto md:max-w-[1170px]">
       <h1 class="text-lg">Dashboard</h1>
-      <div class="flex flex-row items-stretch justify-start">
-        <div class="grow">
-          <h2>Totals</h2>
-        </div>
-        <div>
-          <input type="date" class="date-picker" name="start" />
-          <input type="date" class="date-picker" name="end" />
-        </div>
-      </div>
-
-      <div class="totals grid grid-cols-6 gap-[21px] text-center">
-        <div class="domains-total flex flex-col items-stretch justify-center">
-          <div
-            class="count totals-count total-domains text-4xl font-black grow">
-            0
+      <div
+        class="flex flex-col items-stretch justify-start gap-[21px] w-full bg-white rounded-xl shadow-xl border-gray-300">
+        <div class="flex flex-row items-stretch justify-start p-[21px]">
+          <div class="grow">
+            <h2>Totals</h2>
           </div>
-          <div class="font-thin">Domains</div>
-        </div>
-
-        <div class="pageviews-total flex flex-col items-stretch justify-center">
-          <div
-            class="count totals-count total-pageviews text-4xl font-black grow">
-            0
+          <div>
+            <input type="date" class="date-picker" name="start" />
+            <input type="date" class="date-picker" name="end" />
           </div>
-          <div class="font-thin">Pageviews</div>
-        </div>
-
-        <div class="sessions-total flex flex-col items-stretch justify-center">
-          <div
-            class="count totals-count total-sessions text-4xl font-black grow">
-            0
-          </div>
-          <div class="font-thin">Sessions</div>
-        </div>
-
-        <div class="visitors-total flex flex-col items-stretch justify-center">
-          <div
-            class="count totals-count total-visitors text-4xl font-black grow">
-            0
-          </div>
-          <div class="font-thin">Visitors</div>
         </div>
 
         <div
-          class="conversions-total flex flex-col items-stretch justify-center">
+          class="totals grid grid-cols-6 gap-[21px] text-center p-[21px] bg-gray-100 rounded-xl rounded-t-none">
           <div
-            class="count totals-count total-conversions text-4xl font-black grow">
-            0
-          </div>
-          <div class="font-thin">Conversions</div>
-        </div>
-
-        <div
-          class="flex flex-col items-stretch justify-center gap-[21px] text-left">
-          <div class="calls-total flex flex-row items-stretch justify-center">
-            <div class="grow font-thin">Calls</div>
+            class="domains-total flex flex-col items-stretch justify-center rounded-xl shadow-lg border-gray-300 border-1 border-solid bg-white">
             <div
-              class="count totals-count total-calls text-2xl font-black text-right">
-              0
+              class="count totals-count total-domains text-4xl font-black grow flex items-center justify-center p-[21px]">
+              <span>0</span>
             </div>
-          </div>
-
-          <div class="emails-total flex flex-row items-stretch justify-center">
-            <div class="grow font-thin">Emails</div>
-            <div
-              class="count totals-count total-emails text-2xl font-black text-right">
-              0
-            </div>
+            <div class="font-thin p-[11px]">Domains</div>
           </div>
 
           <div
-            class="submissions-total flex flex-row items-stretch justify-center">
-            <div class="grow font-thin">Submissions</div>
+            class="pageviews-total flex flex-col items-stretch justify-center rounded-xl shadow-lg border-gray-300 border-1 border-solid bg-white">
             <div
-              class="count totals-count total-submissions text-2xl font-black text-right">
-              0
+              class="count totals-count total-pageviews text-4xl font-black grow flex items-center justify-center p-[21px]">
+              <span>0</span>
+            </div>
+            <div class="font-thin p-[11px]">Pageviews</div>
+          </div>
+
+          <div
+            class="sessions-total flex flex-col items-stretch justify-center rounded-xl shadow-lg border-gray-300 border-1 border-solid bg-white">
+            <div
+              class="count totals-count total-sessions text-4xl font-black grow flex items-center justify-center p-[21px]">
+              <span>0</span>
+            </div>
+            <div class="font-thin p-[11px]">Sessions</div>
+          </div>
+
+          <div
+            class="visitors-total flex flex-col items-stretch justify-center rounded-xl shadow-lg border-gray-300 border-1 border-solid bg-white">
+            <div
+              class="count totals-count total-visitors text-4xl font-black grow flex items-center justify-center p-[21px]">
+              <span>0</span>
+            </div>
+            <div class="font-thin p-[11px]">Visitors</div>
+          </div>
+
+          <div
+            class="conversions-total flex flex-col items-stretch justify-center rounded-xl shadow-lg border-gray-300 border-1 border-solid bg-white">
+            <div
+              class="count totals-count total-conversions text-4xl font-black grow flex items-center justify-center p-[21px]">
+              <span>0</span>
+            </div>
+            <div class="font-thin p-[11px]">Conversions</div>
+          </div>
+
+          <div
+            class="flex flex-col items-stretch justify-center gap-[21px] text-left divide-y-1 divide-y-gray-300">
+            <div class="calls-total flex flex-row items-stretch justify-center">
+              <div class="grow font-thin">Calls</div>
+              <div
+                class="count totals-count total-calls text-2xl font-black text-right">
+                0
+              </div>
+            </div>
+
+            <div
+              class="emails-total flex flex-row items-stretch justify-center">
+              <div class="grow font-thin">Emails</div>
+              <div
+                class="count totals-count total-emails text-2xl font-black text-right">
+                0
+              </div>
+            </div>
+
+            <div
+              class="submissions-total flex flex-row items-stretch justify-center">
+              <div class="grow font-thin">Submissions</div>
+              <div
+                class="count totals-count total-submissions text-2xl font-black text-right">
+                0
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div id="results"></div>
+      <div
+        id="results"
+        class="flex flex-col items-stretch justify-start gap-[21px] w-full"></div>
     </div>
 
     <template id="result-template">
-      <div class="result-item">
-        <div class="accordion-title flex flex-row items-center justify-between">
+      <div
+        class="result-item bg-white rounded-xl shadow-xl border-gray-300 overflow-clip">
+        <div
+          class="accordion-title flex flex-row items-center justify-between p-[21px]">
           <div class="grow">
             <h2 class="domain text-4xl">{{domain_name}}</h2>
           </div>
@@ -115,11 +128,12 @@
             <img src="view.svg" />
           </div>
         </div>
-        <div class="result-item-data">
+        <div
+          class="result-item-data p-[21px] bg-gray-100 rounded-xl rounded-t-none">
           <div
             class="data-summary grid grid-cols-5 gap-[21px] text-center w-full">
             <div
-              class="summary-item pageviews p-[21px] border-1 border-gray-300 rounded-xl shadow-lg flex flex-col items-stretch justify-start">
+              class="summary-item pageviews p-[21px] border-1 border-gray-300 rounded-xl shadow-lg flex flex-col items-stretch justify-start bg-white">
               <div
                 class="font-black text-4xl grow summary-count flex items-center justify-center">
                 <span>{{pageviews}}</span>
@@ -127,7 +141,7 @@
               <div>page views</div>
             </div>
             <div
-              class="summary-item unique-sessions p-[21px] border-1 border-gray-300 rounded-xl shadow-lg flex flex-col items-stretch justify-start">
+              class="summary-item unique-sessions p-[21px] border-1 border-gray-300 rounded-xl shadow-lg flex flex-col items-stretch justify-start bg-white">
               <div
                 class="font-black text-4xl grow summary-count flex items-center justify-center">
                 <span>{{unique_sessions}}</span>
@@ -135,7 +149,7 @@
               <div>sessions</div>
             </div>
             <div
-              class="summary-item unique-visitors p-[21px] border-1 border-gray-300 rounded-xl shadow-lg flex flex-col items-stretch justify-start">
+              class="summary-item unique-visitors p-[21px] border-1 border-gray-300 rounded-xl shadow-lg flex flex-col items-stretch justify-start bg-white">
               <div
                 class="font-black text-4xl grow summary-count flex items-center justify-center">
                 <span>{{unique_visitors}}</span>
@@ -143,7 +157,7 @@
               <div>visitors</div>
             </div>
             <div
-              class="summary-item conversions p-[21px] border-1 border-gray-300 rounded-xl shadow-lg flex flex-col items-stretch justify-start">
+              class="summary-item conversions p-[21px] border-1 border-gray-300 rounded-xl shadow-lg flex flex-col items-stretch justify-start bg-white">
               <div
                 class="font-black text-4xl grow summary-count flex items-center justify-center">
                 <span>{{conversions}}</span>
@@ -153,29 +167,29 @@
             <div
               class="summary-stack flex flex-col items-stretch justify-start gap-[21px] text-left">
               <div
-                class="summary-item calls shadow-xl rounded-xl p-[11px] flex flex-row items-center justofy-start">
+                class="summary-item calls flex flex-row items-center justofy-start">
                 <div class="grow">calls</div>
                 <div class="font-black text-3xl text-right summary-count">
                   {{calls}}
                 </div>
               </div>
               <div
-                class="summary-item emails shadow-xl rounded-xl p-[11px] flex flex-row items-center justofy-start">
+                class="summary-item emails flex flex-row items-center justofy-start">
                 <div class="grow">emails</div>
                 <div class="font-black text-3xl text-right summary-count">
                   {{emails}}
                 </div>
               </div>
               <div
-                class="summary-item submissions shadow-xl rounded-xl p-[11px] flex flex-row items-center justofy-start">
+                class="summary-item submissions flex flex-row items-center justofy-start">
                 <div class="grow">submissions</div>
                 <div class="font-black text-3xl text-right summary-count">
                   {{submissions}}
                 </div>
               </div>
               <div
-                class="summary-item conversion-rate shadow-xl rounded-xl p-[11px] flex flex-row items-center justofy-start">
-                <div class="grow">conversion rate</div>
+                class="summary-item conversion-rate flex flex-row items-center justofy-start">
+                <div class="grow">rate</div>
                 <div class="font-black text-3xl text-right summary-count">
                   {{conversion_rate}}
                 </div>
@@ -441,7 +455,9 @@
                 switch (column) {
                   case "time":
                     td.textContent = form_event_data.time
-                      ? new Date(form_event_data.time).toLocaleString()
+                      ? new Date(
+                          parseInt(form_event_data.time * 1000)
+                        ).toLocaleString()
                       : "";
                     break;
                   case "page":

@@ -104,7 +104,7 @@ function list_all_clients()
         $filename_parts = explode("-", $filename);
         $event_microtime = $filename_parts[1];
         $event_microtime_parts = explode(" ", $event_microtime);
-        $event_microtime_seconds = intval($event_microtime_parts[1]);
+        $event_microtime_seconds = intval($event_microtime_parts[1] + $event_microtime_parts[0]);
 
         $form_data = [
           'time' => $event_microtime_seconds,
