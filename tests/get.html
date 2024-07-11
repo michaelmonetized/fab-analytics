@@ -200,10 +200,7 @@
         <div class="data-leads-table">
           <table class="w-full">
             <thead class="text-left">
-              <tr>
-                <th>Date</th>
-                <th>Page</th>
-              </tr>
+              <tr></tr>
             </thead>
 
             <tbody></tbody>
@@ -318,12 +315,10 @@
             conversionRate + "%";
 
           if (
-            domain.includes("oxstu") &&
+            (domain.includes("oxstu") || domain.includes("alay.co")) &&
             domainData.hasOwnProperty("forms") &&
             domainData.forms.length > 0
           ) {
-            console.log(domainData.forms);
-
             const leads_template =
               document.getElementById("leads-template").content;
             const data_leads = document.importNode(leads_template, true);
@@ -334,49 +329,114 @@
 
             const form_events = domainData.forms;
 
+            let head_cols = [];
+            let row_cols = {};
+            let rows = [];
+
             form_events.forEach((form_event_data) => {
+              const acceptable_field_keys = [
+                /form_fields\[.*\]/,
+                /(name|email|phone|message|pass|user|date|time)/,
+              ];
+
+              // check that the form_event_data keys contain at least an acceptable field key and that at least one of the matching keys does not point to an empty string
+              const rowHasAtLeastOneAcceptableKey = () => {
+                let pass = false;
+
+                const foundKeys = Object.keys(form_event_data.fields).filter(
+                  (key) =>
+                    acceptable_field_keys.some((regex) => regex.test(key))
+                );
+
+                // at least one key has a value
+                if (foundKeys.length > 0) {
+                  foundKeys.forEach((key) => {
+                    if (form_event_data.fields[key] !== "") {
+                      pass = true;
+                    }
+                  });
+
+                  pass = pass || false;
+                }
+
+                return pass;
+              };
+
+              if (!rowHasAtLeastOneAcceptableKey()) {
+                return;
+              }
+
               const row = document.createElement("tr");
 
               row.dataset.time = form_event_data.time;
               row.dataset.status = form_event_data.status;
 
+              row.classList.add(
+                form_event_data.status == "conversion"
+                  ? "bg-green-100"
+                  : "bg-red-100"
+              );
+
               tbody.appendChild(row);
 
-              row.innerHTML = `<td>${form_event_data.time}</td>`;
+              if (form_event_data.time) {
+                head_cols.push("time");
+                const time = new Date(form_event_data.time).toLocaleString();
 
-              if (form_event_data.title) {
-                row.innerHTML = `<td>${form_event_data.title}</td>`;
+                row_cols.time = `<td class="time">${time}</td>`;
+              }
+
+              if (form_event_data.page) {
+                head_cols.push("page");
+
+                row_cols.page = `<td class="page">${form_event_data.page}</td>`;
+              }
+
+              if (form_event_data.status == "conversion") {
+                console.log(form_event_data);
               }
 
               Object.keys(form_event_data.fields).forEach((key) => {
-                if (key.includes("form_fields[")) {
+                if (
+                  (key.includes("form_fields[") ||
+                    key.match(
+                      /(name|email|phone|message|pass|user|date|time)/
+                    )) &&
+                  form_event_data.fields[key] !== ""
+                ) {
                   const field_name = key
                     .replace("form_fields[", "")
                     .replace("]", "");
 
                   const field_value = form_event_data.fields[key];
 
-                  row.innerHTML += `<td>${field_name}</td><td>${field_value}</td>`;
-
-                  if (!head_row.innerHTML.includes(field_name)) {
-                    head_row.innerHTML += `<th class="${field_name}">${field_name}</th>`;
-                  }
+                  head_cols.push(field_name);
+                  row_cols[
+                    field_name
+                  ] = `<td class="${field_name}">${field_value}</td>`;
                 }
               });
 
-              const lead_actions_template = document.getElementById(
-                "lead-actions-template"
-              ).content;
-
-              const lead_actions = document.importNode(
-                lead_actions_template,
-                true
-              );
-
-              row.appendChild(lead_actions);
+              head_cols.push("actions");
+              row_cols.actions = `<td class="actions">
+                <div class="lead-actions">
+                  <button class="lead-action view"><img src="view.svg" /></button>
+                  <button class="lead-action reply"><img src="reply.svg" /></button>
+                  <button class="lead-action fwd"><img src="fwd.svg" /></button>
+                  <button class="lead-action archive"><img src="archive.svg" /></button>
+                  <button class="lead-action flag"><img src="flag.svg" /></button>
+                  <button class="lead-action delete"><img src="delete.svg" /></button>
+                </div>
+                </td>`;
             });
 
-            head_row.innerHTML += `<th>&nbsp;</th>`;
+            // dedupe the head_cols array
+            head_cols = [...new Set(head_cols)];
+
+            Object.keys(row_cols).forEach((col) => {
+              head_row.innerHTML += `<th class="${col}">${col}</th>`;
+              row.innerHTML += row_cols[col];
+            });
           }
 
           results.appendChild(clone);
