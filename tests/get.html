@@ -318,6 +318,7 @@
             conversionRate + "%";
 
           if (
+            domain.includes("oxstu") &&
             domainData.hasOwnProperty("forms") &&
             domainData.forms.length > 0
           ) {
@@ -328,7 +329,9 @@
             const data_leads = document.importNode(leads_template, true);
             clone.querySelector(".result-item-data").appendChild(data_leads);
 
-            const tbody = data_leads.querySelector("tbody");
+            const tbody = clone.querySelector("tbody");
+            const head_row = clone.querySelector("thead tr");
+
             const form_events = domainData.forms;
 
             form_events.forEach((form_event_data) => {
@@ -339,9 +342,11 @@
 
               tbody.appendChild(row);
 
-              row.innerHTML = `<td>${form_event_data.time}</td><td>${form_event_data.title}</td>`;
+              row.innerHTML = `<td>${form_event_data.time}</td>`;
 
-              const head_row = data_leads.querySelector("thead tr");
+              if (form_event_data.title) {
+                row.innerHTML = `<td>${form_event_data.title}</td>`;
+              }
 
               Object.keys(form_event_data.fields).forEach((key) => {
                 if (key.includes("form_fields[")) {
@@ -349,7 +354,7 @@
                     .replace("form_fields[", "")
                     .replace("]", "");
 
-                  const field_value = form_event_data.data[key];
+                  const field_value = form_event_data.fields[key];
 
                   row.innerHTML += `<td>${field_name}</td><td>${field_value}</td>`;
 
@@ -369,9 +374,9 @@
               );
 
               row.appendChild(lead_actions);
-
-              head_row.innerHTML += `<th>&nbsp;</th>`;
             });
+
+            head_row.innerHTML += `<th>&nbsp;</th>`;
           }
 
           results.appendChild(clone);

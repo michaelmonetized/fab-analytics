@@ -75,7 +75,7 @@ const fab__visit = {
   session_start: Date.now(),
   session_end: Date.now() + 20 * 60 * 1000, // +20 mins in milliseconds
   pathname: window.location.pathname,
-  ip: "",
+  ip: "null",
   viewport: [window.innerWidth, window.innerHeight],
   user_agent: navigator.userAgent,
   referrer: document.referrer,
@@ -242,7 +242,7 @@ document.querySelectorAll("form").forEach((form) => {
     await fab_storeEvent(event);
   };
 
-  const abandonmentEvents = [
+  /*const abandonmentEvents = [
     "change",
     "blur",
     "focus",
@@ -255,9 +255,9 @@ document.querySelectorAll("form").forEach((form) => {
 
   abandonmentEvents.forEach((eventType) => {
     form.addEventListener(eventType, (e) =>
-      handleFormAbandonment(form, "presave")
+      //handleFormAbandonment(form, "presave")
     );
-  });
+  });*/
 
   form.querySelectorAll("input, select, textarea, output").forEach((field) => {
     field.addEventListener("change", (e) => {
@@ -266,7 +266,7 @@ document.querySelectorAll("form").forEach((form) => {
         JSON.stringify(new FormData(form))
       );
 
-      handleFormAbandonment(form, "presave");
+      //handleFormAbandonment(form, "presave");
     });
   });
 });
