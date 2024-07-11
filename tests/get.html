@@ -115,7 +115,7 @@
             <img src="view.svg" />
           </div>
         </div>
-        <div class="data">
+        <div class="result-item-data">
           <div
             class="data-summary grid grid-cols-5 gap-[21px] text-center w-full">
             <div
@@ -326,7 +326,7 @@
             const leads_template =
               document.getElementById("leads-template").content;
             const data_leads = document.importNode(leads_template, true);
-            clone.appendChild(data_leads);
+            clone.querySelector(".result-item-data").appendChild(data_leads);
 
             const tbody = data_leads.querySelector("tbody");
             const form_events = domainData.forms;
@@ -335,15 +335,15 @@
               const row = document.createElement("tr");
 
               row.dataset.time = form_event_data.time;
-              row.dataset.status = form_event_data.event;
+              row.dataset.status = form_event_data.status;
 
               tbody.appendChild(row);
 
-              row.innerHTML = `<td>${form_event_data.time}</td><td>${form_event_data.event}</td>`;
+              row.innerHTML = `<td>${form_event_data.time}</td><td>${form_event_data.title}</td>`;
 
               const head_row = data_leads.querySelector("thead tr");
 
-              Object.keys(form_event_data.data).forEach((key) => {
+              Object.keys(form_event_data.fields).forEach((key) => {
                 if (key.includes("form_fields[")) {
                   const field_name = key
                     .replace("form_fields[", "")

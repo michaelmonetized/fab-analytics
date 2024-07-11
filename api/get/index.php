@@ -104,11 +104,12 @@ function list_all_clients()
 
         $form_data = [
           'time' => $event_microtime_seconds,
+          'status' => $event,
+          'page' => $data->title,
+          'fields' => $data->data,
         ];
 
-        $form_data += (array) $data->data;
-
-        $stats['forms'][] = (object) $form_data;
+        $stats['forms'][] = $form_data;
       }
     }
 
