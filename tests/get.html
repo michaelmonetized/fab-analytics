@@ -12,7 +12,7 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
   </head>
   <body
-    class="bg-gray-100 text-gray-900 font-sans text-[21px] flex flex-col items-stretch justify-center min-h-dvh">
+    class="bg-gray-100 text-gray-900 font-sans text-[21px] flex flex-col items-stretch justify-center min-h-dvh gap-md">
     <div
       class="flex flex-col items-stretch justify-start gap-md p-[21px] mx-auto md:w-[768px] bg-white rounded-md shadow-xl border-gray-300">
       <h1 class="text-lg">Test fab-analytics api get</h1>
@@ -20,7 +20,7 @@
 
     <div
       id="results-wrapper"
-      class="flex flex-col items-stretch justify-start gap-md p-[21px] mx-auto md:w-[768px] bg-white rounded-md shadow-xl border-gray-300">
+      class="flex flex-col items-stretch justify-start gap-md p-[21px] mx-auto md:w-[1170px] bg-white rounded-md shadow-xl border-gray-300">
       <h1 class="text-lg">Dashboard</h1>
       <h2>Totals</h2>
       <div class="totals grid grid-cols-6 gap-md text-center">
@@ -57,25 +57,23 @@
 
         <div
           class="flex flex-col items-stretch justify-center gap-md text-left">
-          <div
-            class="calls-total flex flex-row items-stretch justify-center text-right">
+          <div class="calls-total flex flex-row items-stretch justify-center">
             <div class="grow font-thin">Calls</div>
             <div
-              class="count totals-count total-calls text-4xl font-black"></div>
+              class="count totals-count total-calls text-2xl font-black text-right"></div>
           </div>
 
-          <div
-            class="emails-total flex flex-row items-stretch justify-center text-right">
+          <div class="emails-total flex flex-row items-stretch justify-center">
             <div class="grow font-thin">Emails</div>
             <div
-              class="count totals-count total-emails text-4xl font-black"></div>
+              class="count totals-count total-emails text-2xl font-black text-right"></div>
           </div>
 
           <div
-            class="submissions-total flex flex-row items-stretch justify-center text-right">
+            class="submissions-total flex flex-row items-stretch justify-center">
             <div class="grow font-thin">Submissions</div>
             <div
-              class="count totals-count total-submissions text-4xl font-black"></div>
+              class="count totals-count total-submissions text-2xl font-black text-right"></div>
           </div>
         </div>
       </div>
@@ -177,17 +175,14 @@
         results.innerHTML = ""; // Clear any previous content
         const template = document.getElementById("result-template").content;
         const totals = document.querySelector(".totals");
-        const totalsCounts = totals.querySelectorAll(".totals-count");
-        const {
-          $total_domains,
-          $total_pageviews,
-          $total_unique_sessions,
-          $total_unique_visitors,
-          $total_conversions,
-          $total_calls,
-          $total_emails,
-          $total_submissions,
-        } = totalsCounts;
+        let $total_domains = totals.querySelector(".domain-totals"),
+          $total_pageviews = totals.querySelector(".pageviews-totals"),
+          $total_sessions = totals.querySelector(".sessions-totals"),
+          $total_visitors = totals.querySelector(".visitors-totals"),
+          $total_conversions = totals.querySelector(".conversions-totals"),
+          $total_calls = totals.querySelector(".calls-totals"),
+          $total_emails = totals.querySelector(".emails-totals"),
+          $total_submissions = totals.querySelector(".submissions-totals");
 
         $total_domains.textContent = Object.keys(data).length;
         $total_pageviews.textContent = data.reduce(
