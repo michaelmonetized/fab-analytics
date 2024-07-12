@@ -7,7 +7,10 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover, user-scalable=no, minimal-ui, maximum-scale=1.0, minimum-scale=1.0" />
     <title>Get test</title>
+
     <script src="/fab-analytics/tailwind.config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body
@@ -232,15 +235,14 @@
     </div>
 
     <template id="result-template">
-      <div
-        class="result-item bg-white rounded-xl shadow-xl border-gray-300 overflow-clip">
+      <div class="result-item bg-white rounded-xl shadow-xl border-gray-300">
         <div
           class="accordion-title flex flex-row items-center justify-between p-[21px]">
           <div class="grow">
             <h2 class="domain text-4xl">{{domain_name}}</h2>
           </div>
           <div>
-            <img src="view.svg" />
+            <img src="../icons/view.svg" width="28" height="28" alt="toggle" />
           </div>
         </div>
         <div
@@ -322,12 +324,14 @@
             <h3>Leads</h3>
           </div>
           <div>
-            <img src="view.svg" />
+            <img src="../icons/view.svg" width="28" hieght="28" />
           </div>
         </div>
 
-        <div class="data-leads-table">
-          <table class="w-full">
+        <div class="data-leads-table w-full overflow-x-auto">
+          <table
+            class="w-full border border-solid border-gray-300 rounded-xl bg-white"
+            cellpadding="11">
             <thead class="text-left">
               <tr></tr>
             </thead>
@@ -341,12 +345,24 @@
     <template id="lead-actions-template">
       <td>
         <div class="lead-actions">
-          <button class="lead-action view"><img src="view.svg" /></button>
-          <button class="lead-action reply"><img src="reply.svg" /></button>
-          <button class="lead-action fwd"><img src="fwd.svg" /></button>
-          <button class="lead-action archive"><img src="archive.svg" /></button>
-          <button class="lead-action flag"><img src="flag.svg" /></button>
-          <button class="lead-action delete"><img src="delete.svg" /></button>
+          <button class="../icons/lead-action view">
+            <img src="view.svg" width="28" hieght="28" />
+          </button>
+          <button class="../icons/lead-action reply">
+            <img src="reply.svg" width="28" hieght="28" />
+          </button>
+          <button class="../icons/lead-action fwd">
+            <img src="fwd.svg" width="28" hieght="28" />
+          </button>
+          <button class="../icons/lead-action archive">
+            <img src="archive.svg" width="28" hieght="28" />
+          </button>
+          <button class="../icons/lead-action flag">
+            <img src="flag.svg" width="28" hieght="28" />
+          </button>
+          <button class="../icons/lead-action delete">
+            <img src="delete.svg" width="28" hieght="28" />
+          </button>
         </div>
       </td>
     </template>
@@ -577,12 +593,12 @@
                   case "actions":
                     td.innerHTML = `
                 <div class="lead-actions">
-                  <button class="lead-action view"><img src="view.svg" /></button>
-                  <button class="lead-action reply"><img src="reply.svg" /></button>
-                  <button class="lead-action fwd"><img src="fwd.svg" /></button>
-                  <button class="lead-action archive"><img src="archive.svg" /></button>
-                  <button class="lead-action flag"><img src="flag.svg" /></button>
-                  <button class="lead-action delete"><img src="delete.svg" /></button>
+                  <button class="../icons/lead-action view"><img src="view.svg" width="28" hieght="28" /></button>
+                  <button class="../icons/lead-action reply"><img src="reply.svg" width="28" hieght="28" /></button>
+                  <button class="../icons/lead-action fwd"><img src="fwd.svg" width="28" hieght="28" /></button>
+                  <button class="../icons/lead-action archive"><img src="archive.svg" width="28" hieght="28" /></button>
+                  <button class="../icons/lead-action flag"><img src="flag.svg" width="28" hieght="28" /></button>
+                  <button class="../icons/lead-action delete"><img src="delete.svg" width="28" hieght="28" /></button>
                 </div>`;
                     break;
                   default:

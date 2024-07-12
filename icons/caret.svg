@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 1080 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <rect id="caret" x="0" y="0" width="1080" height="1080" style="fill:none;"/>
+    <g id="caret1" serif:id="caret">
+        <g id="caret-down-thin.svg" transform="matrix(6.4284,0,0,6.4284,-282.835,-334.266)">
+            <path d="M210.83,98.83L130.83,178.83C130.08,179.581 129.061,180.003 128,180.003C126.939,180.003 125.92,179.581 125.17,178.83L45.17,98.83C44.42,98.08 43.998,97.061 43.998,96C43.998,93.804 45.804,91.998 48,91.998C49.061,91.998 50.08,92.42 50.83,93.17L128,170.34L205.17,93.17C205.92,92.42 206.939,91.998 208,91.998C210.196,91.998 212.002,93.804 212.002,96C212.002,97.061 211.58,98.08 210.83,98.83Z" style="fill-rule:nonzero;"/>
+        </g>
+    </g>
+</svg>

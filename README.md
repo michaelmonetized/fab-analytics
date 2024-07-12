@@ -33,9 +33,9 @@ const fab__host = "https://www.hustlelaunch.com";
 
 ### Enlisting the help of AI
 
-# Dashboard development
+## Dashboard development
 
-## The fetch request is…
+### The fetch request is…
 
 ```js
 fetch(`/fab-analytics/api/get/`)
@@ -90,7 +90,7 @@ fetch(`/fab-analytics/api/get/`)
 ]
 ```
 
-## and something like the template i want to use
+### and something like the template i want to use
 
 ```html
 <div class="results">
@@ -234,11 +234,11 @@ fetch(`/fab-analytics/api/get/`)
 </div>
 ```
 
-## Example design
+### Example design
 
 ![image info](https://github.com/michaelmonetized/fab-analytics/blob/v0.1.4-rc/dashboard.png?raw=true)
 
-### Instructions
+#### Instructions
 
 For test purposes I'm leaning towards writing this in vanilla browser js and html &lt;template&gt; tags
 
