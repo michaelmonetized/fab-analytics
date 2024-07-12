@@ -97,7 +97,7 @@ function list_all_clients()
           break;
       }
 
-      $stats['data'] = $data;
+      $stats['data'][] = $data;
 
       if ($data->category === 'form') {
         $filename = basename($file);

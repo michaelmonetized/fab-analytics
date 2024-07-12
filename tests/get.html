@@ -8,7 +8,6 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover, user-scalable=no, minimal-ui, maximum-scale=1.0, minimum-scale=1.0" />
     <title>Get test</title>
 
-    <script src="/fab-analytics/tailwind.config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <link rel="stylesheet" href="../styles.css" />
@@ -31,8 +30,11 @@
             <input
               type="search"
               class="search-filter rounded-l-full text-md placeholder:text-md px-[21px] py-[11px] border border-gray-300 border-solid block"
+              id="domain-filter"
               name="domain-filter"
-              placeholder="domain" />
+              placeholder="domain"
+              list="domain-list" />
+            <datalist id="domain-list"></datalist>
             <ul class="dropdown-menu list-none block grow">
               <li class="relative hover:*:scale-y-100 group">
                 <a
@@ -314,24 +316,31 @@
             </div>
           </div>
         </div>
+        <div
+          class="charts grid grid-cols-1 grid-rows-1 place-items-center place-content-center">
+          <canvas class="chart pageviews-chart"></canvas>
+          <canvas class="chart sessions-chart"></canvas>
+          <canvas class="chart visitors-chart"></canvas>
+          <canvas class="chart conversions-chart"></canvas>
+        </div>
       </div>
     </template>
 
     <template id="leads-template">
-      <div class="data-leads">
-        <div class="accordion-title">
-          <div>
-            <h3>Leads</h3>
+      <div
+        class="data-leads mt-[42px] bg-white rounded-xl border border-solid border-gray-300 overflow-clip">
+        <div
+          class="accordion-title flex flex-row items-center justify-between p-[21px]">
+          <div class="grow">
+            <h3 class="domain text-2xl font-black">Leads</h3>
           </div>
           <div>
-            <img src="../icons/view.svg" width="28" hieght="28" />
+            <img src="../icons/view.svg" width="28" height="28" alt="toggle" />
           </div>
         </div>
 
         <div class="data-leads-table w-full overflow-x-auto">
-          <table
-            class="w-full border border-solid border-gray-300 rounded-xl bg-white"
-            cellpadding="11">
+          <table class="w-full" cellpadding="11">
             <thead class="text-left">
               <tr></tr>
             </thead>
@@ -340,31 +349,6 @@
           </table>
         </div>
       </div>
-    </template>
-
-    <template id="lead-actions-template">
-      <td>
-        <div class="lead-actions">
-          <button class="../icons/lead-action view">
-            <img src="view.svg" width="28" hieght="28" />
-          </button>
-          <button class="../icons/lead-action reply">
-            <img src="reply.svg" width="28" hieght="28" />
-          </button>
-          <button class="../icons/lead-action fwd">
-            <img src="fwd.svg" width="28" hieght="28" />
-          </button>
-          <button class="../icons/lead-action archive">
-            <img src="archive.svg" width="28" hieght="28" />
-          </button>
-          <button class="../icons/lead-action flag">
-            <img src="flag.svg" width="28" hieght="28" />
-          </button>
-          <button class="../icons/lead-action delete">
-            <img src="delete.svg" width="28" hieght="28" />
-          </button>
-        </div>
-      </td>
     </template>
 
     <script>
@@ -393,7 +377,9 @@
             ".submissions-total .count"
           );
 
-        $total_domains.textContent = Object.keys(data).length;
+        const domainNames = Object.keys(data);
+
+        $total_domains.textContent = domainNames.length;
 
         const domainsArray = Object.values(data);
 
@@ -435,6 +421,7 @@
         for (const domain in data) {
           const clone = document.importNode(template, true);
           const domainData = data[domain];
+          const item = clone.querySelector(".result-item");
 
           const conversionRate = (
             (domainData.conversions / domainData.unique_sessions) *
@@ -459,8 +446,61 @@
           clone.querySelector(".conversion-rate .summary-count").textContent =
             conversionRate + "%";
 
+          const domainAllEvents = domainData.data; // this is an object with keys session_start, session_end, pathname, ip, viewport, user_agent, referrer, browser_language, browser_timezone, device, screen, title, event, category, action, data
+
+          console.log(domainAllEvents);
+
+          const getMetricByDateUnique = (metric) => {
+            const uniqueDates = new Set(); // something is missing here?
+            const metricByDate = {};
+            const data = chartData[metric];
+
+            for (const event of chartData[metric]) {
+              if (event.event === metric) {
+                const date = new Date(event.session_start);
+                const dateString = date.toLocaleDateString("en-US", {
+                  month: "2-digit",
+                  day: "2-digit",
+                  year: "numeric",
+                });
+
+                if (!uniqueDates.has(dateString)) {
+                  uniqueDates.add(dateString);
+                  metricByDate[dateString] = 0;
+                }
+
+                metricByDate[dateString] += 1;
+              }
+            }
+
+            return metricByDate;
+          };
+
+          const renderChart = (ctx, metric, title) => {
+            const data = getMetricByDateUnique(metric);
+
+            const chart = new Chart(ctx, {
+              type: "line",
+              data: {
+                labels: Object.keys(data), // needs to return an array of unique dates (mm/dd/yyy)
+                datasets: [
+                  {
+                    label: title,
+                    data: Object.values(data).map((events) => events.length),
+                    borderColor: "rgb(59, 130, 246)",
+                    backgroundColor: "rgba(59, 130, 246, 0.2)",
+                    fill: true,
+                  },
+                ],
+              },
+            });
+
+            // set the canvas width and height to parent div width and 400px
+            ctx.width = item.querySelector(".charts").clientWidth;
+            ctx.height = 400;
+          };
+
           if (
-            //(domain.includes("oxstu") || domain.includes("alay.co")) &&
             domainData.hasOwnProperty("forms") &&
             domainData.forms.length > 0
           ) {
@@ -525,11 +565,10 @@
             // Convert Set to Array and add 'actions' at the end
             const columnArray = Array.from(allColumns);
             columnArray.push("actions");
-            console.log(columnArray);
 
             // Create header row
             const headerRow = document.createElement("tr");
-            allColumns.forEach((column) => {
+            columnArray.forEach((column) => {
               const th = document.createElement("th");
               th.textContent = known_acf_labels[column] || column;
               th.className = column;
@@ -539,8 +578,6 @@
 
             // Create data rows
             form_events.forEach((form_event_data) => {
-              console.log(form_event_data);
-
               const rowHasAtLeastOneAcceptableKey = () => {
                 let pass = false;
 
@@ -566,17 +603,32 @@
               if (!rowHasAtLeastOneAcceptableKey()) {
                 return;
               }
+
               const row = document.createElement("tr");
+
               row.dataset.time = form_event_data.time;
               row.dataset.status = form_event_data.status;
-              row.classList.add(
-                form_event_data.status == "conversion"
-                  ? "bg-green-100"
-                  : "bg-red-100"
-              );
 
-              allColumns.forEach((column) => {
+              const statusClass =
+                form_event_data.status == "conversion"
+                  ? [
+                      "bg-green-100",
+                      "odd:bg-green-100/50",
+                      "hover:bg-green-200",
+                      "odd:hover:bg-green-200/50",
+                    ]
+                  : [
+                      "bg-red-100",
+                      "odd:bg-red-100/50",
+                      "hover:bg-red-200",
+                      "odd:hover:bg-red-200/50",
+                    ];
+
+              row.classList.add(...statusClass);
+
+              columnArray.forEach((column) => {
                 const td = document.createElement("td");
+
                 td.className = column;
 
                 switch (column) {
@@ -586,20 +638,23 @@
                           parseInt(form_event_data.time * 1000)
                         ).toLocaleString()
                       : "";
+
                     break;
                   case "page":
                     td.textContent = form_event_data.page || "";
+
                     break;
                   case "actions":
                     td.innerHTML = `
-                <div class="lead-actions">
-                  <button class="../icons/lead-action view"><img src="view.svg" width="28" hieght="28" /></button>
-                  <button class="../icons/lead-action reply"><img src="reply.svg" width="28" hieght="28" /></button>
-                  <button class="../icons/lead-action fwd"><img src="fwd.svg" width="28" hieght="28" /></button>
-                  <button class="../icons/lead-action archive"><img src="archive.svg" width="28" hieght="28" /></button>
-                  <button class="../icons/lead-action flag"><img src="flag.svg" width="28" hieght="28" /></button>
-                  <button class="../icons/lead-action delete"><img src="delete.svg" width="28" hieght="28" /></button>
+                <div class="lead-actions grid grid-cols-6">
+                  <button class="lead-action view"><img src="../icons/view.svg" width="28" hieght="28" /></button>
+                  <button class="lead-action reply"><img src="../icons/reply.svg" width="28" hieght="28" /></button>
+                  <button class="lead-action fwd"><img src="../icons/fwd.svg" width="28" hieght="28" /></button>
+                  <button class="lead-action archive"><img src="../icons/archive.svg" width="28" hieght="28" /></button>
+                  <button class="lead-action flag"><img src="../icons/flag.svg" width="28" hieght="28" /></button>
+                  <button class="lead-action delete"><img src="../icons/trash.svg" width="28" hieght="28" /></button>
                 </div>`;
+
                     break;
                   default:
                     const fieldKey = `form_fields[${column}]`;
@@ -616,8 +671,45 @@
             });
           }
 
+          item.dataset.domain = domain; // TypeError: Cannot set properties of undefined (setting 'domain')
           results.appendChild(clone);
+
+          /* render the charts
+          renderChart(
+            item.querySelector(".pageviews-chart"),
+            "pageviews",
+            "Pageviews"
+          ); */
         }
+
+        const domainList = document.querySelector("#domain-list");
+        domainNames.forEach((domainName) => {
+          const option = document.createElement("option");
+          option.value = domainName;
+          option.textContent = domainName;
+          domainList.appendChild(option);
+        });
+
+        const domainFilter = document.querySelector("#domain-filter");
+
+        const filterEvents = ["keyup", "change"];
+        filterEvents.forEach((eventType) => {
+          domainFilter.addEventListener(eventType, (e) => {
+            const domainName = e.target.value.toLowerCase(); // Convert to lowercase for case-insensitive matching
+            const results = document.querySelectorAll(".result-item");
+            results.forEach((result) => {
+              // Check if the domainName is part of the data-domain attribute
+              if (
+                domainName === "" ||
+                result.dataset.domain.toLowerCase().includes(domainName)
+              ) {
+                result.style.display = "block"; // Show the result
+              } else {
+                result.style.display = "none"; // Hide the result
+              }
+            });
+          });
+        });
       }
     </script>
   </body>

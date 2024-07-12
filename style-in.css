@@ -3,7 +3,31 @@
 @tailwind utilities;
 
 @layer base {
-  .data-leads td {
-    @apply border border-solid border-gray-300 max-w-[150px] truncate;
+  .data-leads :is(th, td):not(.actions) {
+    @apply max-w-[150px] truncate;
+  }
+
+  .data-leads :is(th, td).actions {
+    @apply max-w-[252px] min-w-[252px] w-[252px];
+  }
+
+  .data-leads tr {
+    @apply divide-x divide-gray-300 relative;
+  }
+
+  .data-leads tbody {
+    @apply divide-y divide-gray-300;
+  }
+
+  .data-leads table {
+    @apply table-auto w-full divide-y divide-gray-300;
+  }
+
+  .data-leads thead th.actions {
+    @apply text-right;
+  }
+
+  .data-leads tr:hover :is(th, td).actions {
+    @apply sticky right-0 bg-white transition-all duration-300 ease-out;
   }
 }
