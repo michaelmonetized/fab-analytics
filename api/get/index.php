@@ -105,7 +105,7 @@ function list_all_clients()
         $event_microtime = $filename_parts[1];
         $event_microtime_parts = explode(" ", $event_microtime);
         $event_microtime_seconds = intval($event_microtime_parts[1]);
-        $event_microtime_milliseconds = floatVal($event_microtime_parts[0]);
+        $event_microtime_milliseconds = floatval($event_microtime_parts[0]);
 
         $form_data = [
           'time' => $event_microtime_seconds,
@@ -114,7 +114,7 @@ function list_all_clients()
           'fields' => $data->data,
         ];
 
-        $stats['forms'][$event_microtime_milliseconds] = $form_data;
+        $stats['forms'][intval(($event_microtime_seconds + $event_microtime_milliseconds) * 1000)] = $form_data;
       }
     }
 
