@@ -118,7 +118,9 @@ function list_all_clients()
       }
     }
 
-    rsort($stats['forms']);
+    if (isset($stats['forms']) && is_array($stats['forms'])) {
+      rsort($stats['forms']);
+    }
 
     $stats['unique_sessions'] = count(array_unique($pageviews));
     $stats['unique_visitors'] = count(array_unique($visitors));
