@@ -114,9 +114,11 @@ function list_all_clients()
           'fields' => $data->data,
         ];
 
-        $stats['forms'][] = $form_data;
+        $stats['forms'][$event_microtime_milliseconds] = $form_data;
       }
     }
+
+    rsort($stats['forms']);
 
     $stats['unique_sessions'] = count(array_unique($pageviews));
     $stats['unique_visitors'] = count(array_unique($visitors));

@@ -7,30 +7,145 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover, user-scalable=no, minimal-ui, maximum-scale=1.0, minimum-scale=1.0" />
     <title>Get test</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,container-queries"></script>
+    <script src="/fab-analytics/tailwind.config.js"></script>
+    <link rel="stylesheet" href="../styles.css" />
   </head>
   <body
     class="bg-gray-100 text-gray-900 font-sans text-[21px] flex flex-col items-stretch justify-center min-h-dvh gap-[21px]">
     <div
-      class="flex flex-col items-stretch justify-start gap-[21px] p-[21px] mx-auto md:w-[768px] bg-white rounded-xl shadow-xl border-gray-300">
-      <h1 class="text-lg">Test fab-analytics api get</h1>
-    </div>
-
-    <div
       id="results-wrapper"
-      class="flex flex-col items-stretch justify-start gap-[21px] mx-auto md:max-w-[1170px]">
-      <h1 class="text-lg">Dashboard</h1>
+      class="flex flex-col items-stretch justify-start gap-[21px] mx-auto md:max-w-[1170px] px-[21px] py-[42px]">
+      <h1 class="text-4xl font-black">dashboard</h1>
       <div
-        class="flex flex-col items-stretch justify-start gap-[21px] w-full bg-white rounded-xl shadow-xl border-gray-300">
-        <div class="flex flex-row items-stretch justify-start p-[21px]">
-          <div class="grow">
-            <h2>Totals</h2>
+        class="flex flex-col items-stretch justify-start gap-[21px] w-full bg-white rounded-xl shadow-xl border border-gray-300 border-solid">
+        <div
+          class="flex flex-row items-center justify-start p-[21px] gap-[21px]">
+          <div class="">
+            <h2>totals</h2>
           </div>
-          <div>
-            <input type="date" class="date-picker" name="start" />
-            <input type="date" class="date-picker" name="end" />
+          <div
+            class="filters flex items-start justify-start grow min-w-min md:w-50 max-w-full">
+            <input
+              type="search"
+              class="search-filter rounded-l-full text-md placeholder:text-md px-[21px] py-[11px] border border-gray-300 border-solid block"
+              name="domain-filter"
+              placeholder="domain" />
+            <ul class="dropdown-menu list-none block grow">
+              <li class="relative hover:*:scale-y-100 group">
+                <a
+                  href="#toggle-menu"
+                  class="menu-toggle down-caret border border-gray-300 border-solid rounded-r-full bg-white flex items-center justify-between px-[21px] py-[11px] relative z-20"
+                  ><span class="date-range-label text-md text-gray-400 block"
+                    >date range</span
+                  >
+                  <span
+                    class="date-range-value bg-blue-500 rounded-full text-white block px-[21px] py-[11px] text-sm absolute right-[11px]"
+                    >All</span
+                  ></a
+                >
+                <ul
+                  id="menu"
+                  class="dropdown-menu-items list-none min-w-min w-full bg-white rounded-xl shadow-xl flex flex-col items-stretch justify-start divide-y divide-gray-300 *:*:text-sm absolute top-[14px] pt-[42px] border border-gray-300 border-solid scale-y-0 duration-300 ease-in-out origin-top group-hover:scale-y-100">
+                  <li>
+                    <label
+                      class="p-[11px] bg-white hover:bg-gray-100 has-[input:checked]:bg-blue-500 has-[input:checked]:text-white block cursor-pointer"
+                      ><input
+                        class="hidden"
+                        type="radio"
+                        name="date-range"
+                        value="all"
+                        checked />
+                      <span>All</span></label
+                    >
+                  </li>
+                  <li>
+                    <label
+                      class="p-[11px] bg-white hover:bg-gray-100 has-[input:checked]:bg-blue-500 has-[input:checked]:text-white block cursor-pointer"
+                      ><input
+                        class="hidden"
+                        type="radio"
+                        name="date-range"
+                        value="last-7-days" />
+                      <span>Last 7 Days</span></label
+                    >
+                  </li>
+                  <li>
+                    <label
+                      class="p-[11px] bg-white hover:bg-gray-100 has-[input:checked]:bg-blue-500 has-[input:checked]:text-white block cursor-pointer"
+                      ><input
+                        class="hidden"
+                        type="radio"
+                        name="date-range"
+                        value="last-30-days" />
+                      <span>Last 30 Days</span></label
+                    >
+                  </li>
+                  <li>
+                    <label
+                      class="p-[11px] bg-white hover:bg-gray-100 has-[input:checked]:bg-blue-500 has-[input:checked]:text-white block cursor-pointer"
+                      ><input
+                        class="hidden"
+                        type="radio"
+                        name="date-range"
+                        value="last-quarter" />
+                      <span>Last quarter</span></label
+                    >
+                  </li>
+                  <li>
+                    <label
+                      class="p-[11px] bg-white hover:bg-gray-100 has-[input:checked]:bg-blue-500 has-[input:checked]:text-white block cursor-pointer"
+                      ><input
+                        class="hidden"
+                        type="radio"
+                        name="date-range"
+                        value="year-to-date" />
+                      <span>Year To Date</span></label
+                    >
+                  </li>
+                  <li>
+                    <label
+                      class="p-[11px] bg-white hover:bg-gray-100 has-[input:checked]:bg-blue-500 has-[input:checked]:text-white block cursor-pointer"
+                      ><input
+                        class="hidden"
+                        type="radio"
+                        name="date-range"
+                        value="last-12-months" />
+                      <span>Last 12 Months</span></label
+                    >
+                  </li>
+                  <li class="group">
+                    <label
+                      class="p-[11px] bg-white hover:bg-gray-100 has-[input:checked]:bg-blue-500 has-[input:checked]:text-white block cursor-pointer peer"
+                      ><input
+                        class="hidden"
+                        type="radio"
+                        name="date-range"
+                        value="custom" />
+                      <span>Custom</span></label
+                    >
+                    <div
+                      class="flex flex-row items-center justify-start p-[11px]">
+                      <label
+                        class="flex items-center gap-[11px] grow w-50 px-[21px] py-[11px] border border-solid border-gray-300 rounded-l-full"
+                        ><span>start</span>
+                        <input
+                          type="date"
+                          class="date-picker text-md p-0 grow group-has-[label input:not(::checked)]:hidden group-has-[label input:checked]:block outline-none focus:outline-none active:outline-none invalid:outline-none valid:outline-none"
+                          name="start" />
+                      </label>
+                      <label
+                        class="flex items-center gap-[11px] grow w-50 px-[21px] py-[11px] border border-solid border-gray-300 rounded-r-full"
+                        ><span>end</span>
+                        <input
+                          type="date"
+                          class="date-picker text-md p-0 grow group-has-[label input:not(::checked)]:hidden group-has-[label input:checked]:block outline-none focus:outline-none active:outline-none invalid:outline-none valid:outline-none"
+                          name="start" />
+                      </label>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
           </div>
         </div>
 

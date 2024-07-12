@@ -3,3 +3,4 @@
 *.json
 .anima
 .vscode
+node_modules
