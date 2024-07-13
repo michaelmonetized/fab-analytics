@@ -62,7 +62,7 @@ async function fab__getVisitorIpAddress() {
 }
 
 const fab__ip = fab__getVisitorIpAddress();
-console.log(fab__ip);
+console.log("fab__ip:", fab__ip);
 
 /**
  * Visit object
@@ -135,12 +135,13 @@ async function fab_storeEvent(data) {
  * Tracks a pageview
  * @returns {Promise<void>}
  */
-async function fab__pageview() {
-  let ip = await fab__getVisitorIpAddress();
+function fab__pageview() {
+  let ip = fab__getVisitorIpAddress();
+  console.log("ip:", ip);
 
   ip.then((ip) => {
     fab__visit.ip = ip;
-    console.log("IP address:", fab__visit.ip);
+    console.log("fab__visit.ip:", fab__visit.ip);
 
     return fab_storeEvent({
       ...fab__visit,
