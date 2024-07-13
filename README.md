@@ -31,7 +31,11 @@ const fab__host = "https://www.hustlelaunch.com";
 - [ ] Implement graphs/charts
 - [ ] Pick ip locate provider (ipify, ipinfo, etc)
 - [ ] Track page load time
+- [ ] Track bounces
 - [ ] Add referrers table to dashboard
+- [ ] Add sessions/visitor average
+- [ ] Add pages/session avg
+- [ ] Add session duration
 - [ ] make date range filters work
 - [ ] make accordion titles toggleable (label with radio?)
 - [ ] Clear fuckery out of test dashboard
@@ -45,6 +49,7 @@ const fab__host = "https://www.hustlelaunch.com";
 - [ ] Pro plan features:
   - [ ] AI SEO suggestions
   - [ ] AI conversion optimization suggestions
+  - [ ] Configurable reports?
 - [ ] Docs site
 - [ ] GH pages
 - [ ] Pitch deck + video

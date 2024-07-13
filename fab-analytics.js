@@ -45,13 +45,20 @@ async function fab__getVisitorIpAddress() {
   try {
     const response = await fetch("https://api.ipify.org?format=json");
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const data = await response.json();
 
     return data.ip;
   } catch (error) {
+    console.error("Error fetching IP address:", error);
     return null;
   }
 }
+
+const fab__ip = await fab__getVisitorIpAddress();
 
 /**
  * Visit object
@@ -125,16 +132,22 @@ async function fab_storeEvent(data) {
  * @returns {Promise<void>}
  */
 async function fab__pageview() {
-  if (!fab__visit.ip) {
-    fab__visit.ip = await fab__getVisitorIpAddress();
-  }
+  try {
+    if (!fab__visit.ip) {
+      fab__visit.ip = fab__ip || (await fab__getVisitorIpAddress());
+    }
 
-  return fab_storeEvent({
-    ...fab__visit,
-    event: "pageview",
-    category: "session",
-    action: "start",
-  });
+    console.log("IP address:", fab__visit.ip);
+
+    return fab_storeEvent({
+      ...fab__visit,
+      event: "pageview",
+      category: "session",
+      action: "start",
+    });
+  } catch (error) {
+    console.error("Error in fab__pageview:", error);
+  }
 }
 
 /**
