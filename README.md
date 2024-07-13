@@ -30,6 +30,25 @@ const fab__host = "https://www.hustlelaunch.com";
 - [-] Add get api path
 - [ ] Implement graphs/charts
 - [ ] Pick ip locate provider (ipify, ipinfo, etc)
+- [ ] Track page load time
+- [ ] Add referrers table to dashboard
+- [ ] make date range filters work
+- [ ] make accordion titles toggleable (label with radio?)
+- [ ] Clear fuckery out of test dashboard
+- [ ] Bundle dash assets
+- [ ] Convert host dash to a react/expo and react/nextjs flavor
+- [ ] Create wp admin dashoard plugin
+- [ ] Create an agency client dashboard
+- [ ] Config generator for client + host
+- [ ] SEO analysis report
+- [ ] Sign up form
+- [ ] Pro plan features:
+  - [ ] AI SEO suggestions
+  - [ ] AI conversion optimization suggestions
+- [ ] Docs site
+- [ ] GH pages
+- [ ] Pitch deck + video
+- [ ] Landing page
 
 ### Enlisting the help of AI
 
