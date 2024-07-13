@@ -43,6 +43,7 @@ function fab__randomSessionToken() {
  */
 async function fab__getVisitorIpAddress() {
   let ip = null;
+
   try {
     const response = await fetch("https://api.ipify.org?format=json");
 
@@ -54,7 +55,6 @@ async function fab__getVisitorIpAddress() {
 
     ip = data.ip;
   } catch (error) {
-    console.error("Error fetching IP address:", error);
     ip = null;
   }
 
@@ -62,7 +62,6 @@ async function fab__getVisitorIpAddress() {
 }
 
 const fab__ip = fab__getVisitorIpAddress();
-console.log("fab__ip:", fab__ip);
 
 /**
  * Visit object
@@ -137,11 +136,9 @@ async function fab_storeEvent(data) {
  */
 function fab__pageview() {
   let ip = fab__getVisitorIpAddress();
-  console.log("ip:", ip);
 
   ip.then((ip) => {
     fab__visit.ip = ip;
-    console.log("fab__visit.ip:", fab__visit.ip);
 
     return fab_storeEvent({
       ...fab__visit,
