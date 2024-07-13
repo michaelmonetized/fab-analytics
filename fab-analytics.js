@@ -134,7 +134,7 @@ async function fab_storeEvent(data) {
 async function fab__pageview() {
   try {
     if (!fab__visit.ip) {
-      fab__visit.ip = fab__ip || (await fab__getVisitorIpAddress());
+      fab__visit.ip = fab__ip || fab__getVisitorIpAddress();
     }
 
     console.log("IP address:", fab__visit.ip);
