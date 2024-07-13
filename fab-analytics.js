@@ -58,7 +58,7 @@ async function fab__getVisitorIpAddress() {
   }
 }
 
-const fab__ip = await fab__getVisitorIpAddress();
+const fab__ip = fab__getVisitorIpAddress();
 
 /**
  * Visit object
@@ -82,7 +82,7 @@ const fab__visit = {
   session_start: Date.now(),
   session_end: Date.now() + 20 * 60 * 1000, // +20 mins in milliseconds
   pathname: window.location.pathname,
-  ip: "null",
+  ip: fab__ip,
   viewport: [window.innerWidth, window.innerHeight],
   user_agent: navigator.userAgent,
   referrer: document.referrer,
