@@ -51,7 +51,6 @@ async function fab__getVisitorIpAddress() {
     }
 
     const data = await response.json();
-    console.log(data);
 
     ip = data.ip;
   } catch (error) {
@@ -63,6 +62,7 @@ async function fab__getVisitorIpAddress() {
 }
 
 const fab__ip = fab__getVisitorIpAddress();
+console.log(fab__ip);
 
 /**
  * Visit object
@@ -135,23 +135,23 @@ async function fab_storeEvent(data) {
  * Tracks a pageview
  * @returns {Promise<void>}
  */
-async function fab__pageview() {
+function fab__pageview() {
   try {
     if (!fab__visit.ip) {
       fab__visit.ip = fab__ip || fab__getVisitorIpAddress();
     }
 
     console.log("IP address:", fab__visit.ip);
-
-    return fab_storeEvent({
-      ...fab__visit,
-      event: "pageview",
-      category: "session",
-      action: "start",
-    });
   } catch (error) {
     console.error("Error in fab__pageview:", error);
   }
+
+  return fab_storeEvent({
+    ...fab__visit,
+    event: "pageview",
+    category: "session",
+    action: "start",
+  });
 }
 
 /**
