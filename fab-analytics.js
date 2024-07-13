@@ -137,22 +137,20 @@ async function fab_storeEvent(data) {
  */
 async function fab__pageview() {
   let ip = await fab__getVisitorIpAddress();
-  try {
-    if (!fab__visit.ip) {
-      fab__visit.ip = ip;
-    }
 
+  ip.then((ip) => {
+    fab__visit.ip = ip;
     console.log("IP address:", fab__visit.ip);
-  } catch (error) {
-    console.error("Error in fab__pageview:", error);
-  }
 
-  return fab_storeEvent({
-    ...fab__visit,
-    event: "pageview",
-    category: "session",
-    action: "start",
+    return fab_storeEvent({
+      ...fab__visit,
+      event: "pageview",
+      category: "session",
+      action: "start",
+    });
   });
+
+  return ip;
 }
 
 /**
