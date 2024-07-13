@@ -135,10 +135,11 @@ async function fab_storeEvent(data) {
  * Tracks a pageview
  * @returns {Promise<void>}
  */
-function fab__pageview() {
+async function fab__pageview() {
+  let ip = await fab__getVisitorIpAddress();
   try {
     if (!fab__visit.ip) {
-      fab__visit.ip = fab__ip || fab__getVisitorIpAddress();
+      fab__visit.ip = ip;
     }
 
     console.log("IP address:", fab__visit.ip);
