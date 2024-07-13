@@ -315,13 +315,10 @@
               </div>
             </div>
           </div>
-        </div>
-        <div
-          class="charts grid grid-cols-1 grid-rows-1 place-items-center place-content-center">
-          <canvas class="chart pageviews-chart"></canvas>
-          <canvas class="chart sessions-chart"></canvas>
-          <canvas class="chart visitors-chart"></canvas>
-          <canvas class="chart conversions-chart"></canvas>
+          <div class="charts grid grid-cols-1 grid-rows-2 gap-[21px]">
+            <canvas class="chart traffic-chart"></canvas>
+            <canvas class="chart conversions-chart"></canvas>
+          </div>
         </div>
       </div>
     </template>
@@ -352,6 +349,12 @@
     </template>
 
     <script>
+      function renderChart(canvas) {
+        const chartConfig = JSON.parse(canvas.dataset.chart_config);
+
+        const chart = new Chart(canvas, chartConfig);
+      }
+
       document.addEventListener("DOMContentLoaded", function () {
         fetch(`https://www.hustlelaunch.com/fab-analytics/api/get/`)
           .then((response) => response.json())
@@ -446,58 +449,172 @@
           clone.querySelector(".conversion-rate .summary-count").textContent =
             conversionRate + "%";
 
-          const domainAllEvents = domainData.data; // this is an object with keys session_start, session_end, pathname, ip, viewport, user_agent, referrer, browser_language, browser_timezone, device, screen, title, event, category, action, data
+          const domainAllEvents = domainData.data;
+          // sessions are pageviews where session_start is unique
+          // visitors are sessions where session_token is unique
 
-          console.log(domainAllEvents);
+          // Extract unique sessions where session_start is unique
+          const uniqueSessionsMap = new Map();
+          for (const event of domainAllEvents) {
+            if (event.event === "pageview") {
+              if (!uniqueSessionsMap.has(event.session_start)) {
+                uniqueSessionsMap.set(event.session_start, event);
+              }
+            }
+          }
+          const uniqueSessions = Array.from(uniqueSessionsMap.values());
+
+          // Extract unique visitors where session_token is unique
+          const uniqueVisitorsMap = new Map();
+          for (const event of domainAllEvents) {
+            if (event.event === "pageview") {
+              if (!uniqueVisitorsMap.has(event.session_token)) {
+                uniqueVisitorsMap.set(event.session_token, event);
+              }
+            }
+          }
+          const uniqueVisitors = Array.from(uniqueVisitorsMap.values());
+
+          const chartData = {
+            pageviews: domainAllEvents.filter(
+              (event) => event.event === "pageview"
+            ),
+            sessions: uniqueSessions, // what do i do to capture sessions where session_start is unique?
+            visitors: uniqueVisitors, // what do i do to capture sessions where session_token is unique?
+            conversions: domainAllEvents.filter(
+              (event) => event.event === "conversion"
+            ),
+            calls: domainAllEvents.filter(
+              (event) =>
+                event.event === "conversion" && event.category === "calls"
+            ),
+            emails: domainAllEvents.filter(
+              (event) =>
+                event.event === "conversion" && event.category === "emails"
+            ),
+            submissions: domainAllEvents.filter(
+              (event) =>
+                event.event === "conversion" && event.category === "form"
+            ),
+          };
 
           const getMetricByDateUnique = (metric) => {
-            const uniqueDates = new Set(); // something is missing here?
-            const metricByDate = {};
             const data = chartData[metric];
 
-            for (const event of chartData[metric]) {
-              if (event.event === metric) {
-                const date = new Date(event.session_start);
-                const dateString = date.toLocaleDateString("en-US", {
-                  month: "2-digit",
-                  day: "2-digit",
-                  year: "numeric",
-                });
+            const uniqueDates = new Set();
+            const metricByDate = {};
 
-                if (!uniqueDates.has(dateString)) {
-                  uniqueDates.add(dateString);
-                  metricByDate[dateString] = 0;
-                }
+            for (const event of data) {
+              const date = new Date(event.session_start);
 
-                metricByDate[dateString] += 1;
+              const dateString = date.toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+                year: "numeric",
+              });
+
+              if (!uniqueDates.has(dateString)) {
+                uniqueDates.add(dateString);
+                metricByDate[dateString] = 0;
               }
+
+              metricByDate[dateString] += 1;
             }
 
             return metricByDate;
           };
 
-          const renderChart = (ctx, metric, title) => {
-            const data = getMetricByDateUnique(metric);
+          const chartDataSetDefaults = {
+            borderJoinStyle: "round",
+            tension: 0.33333,
+          };
 
-            const chart = new Chart(ctx, {
-              type: "line",
-              data: {
-                labels: Object.keys(data), // needs to return an array of unique dates (mm/dd/yyy)
-                datasets: [
-                  {
-                    label: title,
-                    data: Object.values(data).map((events) => events.length),
-                    borderColor: "rgb(59, 130, 246)",
-                    backgroundColor: "rgba(59, 130, 246, 0.2)",
-                    fill: true,
-                  },
-                ],
+          const trafficChartData = {
+            labels: Object.keys(getMetricByDateUnique("pageviews")),
+            datasets: [
+              {
+                // pageviews blue
+                label: "Pageviews",
+                data: Object.values(getMetricByDateUnique("pageviews")),
+                borderColor: "#3d9fedff",
+                backgroundColor: "#3d9fed70",
+                fill: 1,
+                ...chartDataSetDefaults,
               },
-            });
+              {
+                // sessions red
+                label: "Sessions",
+                data: Object.values(getMetricByDateUnique("sessions")),
+                borderColor: "#ed7979ff",
+                backgroundColor: "#ed797970",
+                fill: 0,
+                ...chartDataSetDefaults,
+              },
+              {
+                // visitors purple
+                label: "Visitors",
+                data: Object.values(getMetricByDateUnique("visitors")),
+                borderColor: "#9f79edff",
+                backgroundColor: "#9f79ed70",
+                fill: "origin",
+                ...chartDataSetDefaults,
+              },
+            ].reverse(),
+          };
 
-            // set the canvas width and height to parent div width and 400px
-            ctx.width = item.querySelector(".charts").clientWidth;
+          const conversionChartData = {
+            labels: Object.keys(getMetricByDateUnique("conversions")),
+            datasets: [
+              {
+                // calls cyan
+                label: "Calls",
+                data: Object.values(getMetricByDateUnique("calls")),
+                borderColor: "#79d0edff",
+                backgroundColor: "#79d0ed70",
+                fill: 1,
+                ...chartDataSetDefaults,
+              },
+              {
+                // emails magenta
+                label: "Emails",
+                data: Object.values(getMetricByDateUnique("emails")),
+                borderColor: "#ed79a3ff",
+                backgroundColor: "#ed79a370",
+                fill: 0,
+                ...chartDataSetDefaults,
+              },
+              {
+                // submissions yellow
+                label: "Submissions",
+                data: Object.values(getMetricByDateUnique("submissions")),
+                borderColor: "#edd479ff",
+                backgroundColor: "#edd47970",
+                fill: "origin",
+                ...chartDataSetDefaults,
+              },
+            ].reverse(),
+          };
+
+          const prepareChartCanvas = (ctx, data, title) => {
+            const config = {
+              type: "line",
+              data: data,
+              options: {
+                plugins: {
+                  title: {
+                    display: true,
+                    text: title,
+                  },
+                },
+              },
+            };
+
+            const chartContainer = item.querySelector(".charts");
+
+            ctx.width = chartContainer.clientWidth;
             ctx.height = 400;
+
+            ctx.dataset.chart_config = JSON.stringify(config);
           };
 
           if (
@@ -674,12 +791,22 @@
           item.dataset.domain = domain; // TypeError: Cannot set properties of undefined (setting 'domain')
           results.appendChild(clone);
 
-          /* render the charts
-          renderChart(
-            item.querySelector(".pageviews-chart"),
-            "pageviews",
-            "Pageviews"
-          ); */
+          prepareChartCanvas(
+            item.querySelector(".traffic-chart"),
+            trafficChartData,
+            "Traffic"
+          );
+
+          prepareChartCanvas(
+            item.querySelector(".conversions-chart"),
+            conversionChartData,
+            "Leads"
+          );
+
+          /* if (item.offsetTop < window.innerHeight) {
+            renderChart(item.querySelector(".traffic-chart"));
+            renderChart(item.querySelector(".conversions-chart"));
+          } */
         }
 
         const domainList = document.querySelector("#domain-list");
@@ -709,6 +836,31 @@
               }
             });
           });
+        });
+
+        const observer = new IntersectionObserver(
+          (entries, observer) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                // Chart container is in viewport, initialize the chart
+                const container = entry.target;
+                const canvas = container.querySelectorAll("canvas");
+
+                canvas.forEach((ctx) => {
+                  renderChart(ctx);
+                });
+
+                // Stop observing this element as we already initialized the chart
+                observer.unobserve(container);
+              }
+            });
+          },
+          { threshold: 0.25 }
+        ); // Adjust threshold as needed
+
+        // Add all chart containers to the observer
+        document.querySelectorAll(".result-item").forEach((container) => {
+          observer.observe(container);
         });
       }
     </script>
