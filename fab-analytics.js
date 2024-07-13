@@ -42,6 +42,7 @@ function fab__randomSessionToken() {
  * @todo
  */
 async function fab__getVisitorIpAddress() {
+  let ip = null;
   try {
     const response = await fetch("https://api.ipify.org?format=json");
 
@@ -50,12 +51,15 @@ async function fab__getVisitorIpAddress() {
     }
 
     const data = await response.json();
+    console.log(data);
 
-    return data.ip;
+    ip = data.ip;
   } catch (error) {
     console.error("Error fetching IP address:", error);
-    return null;
+    ip = null;
   }
+
+  return ip;
 }
 
 const fab__ip = fab__getVisitorIpAddress();
