@@ -27,9 +27,13 @@ const fab__host = "https://www.hustlelaunch.com";
 ## Roadmap
 
 - [ deferred ] Change storage file naming conevention to include event type
-- [-] Add get api path
-- [ ] Implement graphs/charts
-- [ ] Pick ip locate provider (ipify, ipinfo, etc)
+- [x] Add get api path
+- [x] Implement graphs/charts
+- [/] Pick ip locate provider (ipify, ipinfo, etc)
+- [ ] Only render conversions chart if there are conversions
+- [ ] Leads table needs a max height
+- [ ] Destory table if no rows in tbody
+- [ ] Put abandon visibility/processing behind an option
 - [ ] Track page load time
 - [ ] Track bounces
 - [ ] Add referrers table to dashboard

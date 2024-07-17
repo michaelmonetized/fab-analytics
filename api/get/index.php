@@ -62,6 +62,11 @@ function list_all_clients()
 
       $event = $data->event;
 
+      if (property_exists($data, 'ip')) {
+        // try to geo locate ip
+        $ip = $data->ip;
+      }
+
       // fill counts
       switch ($event) {
         case 'pageview':
